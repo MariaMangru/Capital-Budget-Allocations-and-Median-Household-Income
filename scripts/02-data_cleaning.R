@@ -11,7 +11,7 @@
 library(tidyverse)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_data <- read_csv("data/raw_data/plane_data.csv")
 
 cleaned_data <-
   raw_data |>
