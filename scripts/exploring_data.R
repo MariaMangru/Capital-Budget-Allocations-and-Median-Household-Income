@@ -82,34 +82,11 @@ ggplot(ward_funding, aes(x = as.integer(Year), y = Total_Funding, color = `Progr
 ## Aggregate the data ##
 
 # Total overall funding per Ward Number
+# NOTE: numbers aren't correct but this will still be important so keep 
 total_funding_ward <- ward_data_clean |>
   group_by(`Ward Number`) |>
   summarise(Total_Funding = sum(`2022`:`2031`, na.rm = TRUE)) |>
   arrange(desc(Total_Funding))
-
-
-## Funding per Year per Ward Number
-funding_yearly_ward <- ward_data_long |>
-  group_by(`Ward Number`, Year) |>
-  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
-  arrange(`Ward Number`, Year)
-
-
-## Total funding per Program/Agency per Ward Number
-total_funding_program_ward <- ward_data_clean |>
-  group_by(`Ward Number`, `Program/Agency Name`) |>
-  summarise(Total_Funding = sum(`2022`:`2031`, na.rm = TRUE)) |>
-  arrange(`Ward Number`, desc(Total_Funding))
-
-
-## Yearly funding per Program/Agency per Ward Number
-funding_yearly_program_ward <- ward_data_long |>
-  group_by(`Ward Number`, `Program/Agency Name`, Year) |>
-  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
-  arrange(`Ward Number`, `Program/Agency Name`, Year)
-
-
-## Create tables ## 
 
 ## Total Overall Funding per Ward Number
 total_funding_ward |>
@@ -118,6 +95,15 @@ total_funding_ward |>
         format = "html", 
         caption = "Total Overall Funding per Ward Number") |>
   kable_styling(full_width = FALSE, position = "center")
+
+
+
+## Funding per Year per Ward Number
+# Keep this will be useful
+funding_yearly_ward <- ward_data_long |>
+  group_by(`Ward Number`, Year) |>
+  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
+  arrange(`Ward Number`, Year)
 
 # Funding for Each Year per Ward Number
 funding_yearly_ward |>
@@ -128,6 +114,15 @@ funding_yearly_ward |>
         caption = "Yearly Funding per Ward Number") |>
   kable_styling(full_width = FALSE, position = "center")
 
+
+
+## Total funding per Program/Agency per Ward Number
+# Keep because it will be important for any service and demographic level analysis
+total_funding_program_ward <- ward_data_clean |>
+  group_by(`Ward Number`, `Program/Agency Name`) |>
+  summarise(Total_Funding = sum(`2022`:`2031`, na.rm = TRUE)) |>
+  arrange(`Ward Number`, desc(Total_Funding))
+
 # Total Funding per Program/Agency Name for Each Ward Number
 total_funding_program_ward |>
   arrange(`Ward Number`, desc(Total_Funding)) |>
@@ -135,6 +130,16 @@ total_funding_program_ward |>
         format = "html", 
         caption = "Total Funding per Program/Agency Name for Each Ward Number") |>
   kable_styling(full_width = FALSE, position = "center")
+
+
+
+
+## Yearly funding per Program/Agency per Ward Number
+# Keep for now but might be too detailed 
+funding_yearly_program_ward <- ward_data_long |>
+  group_by(`Ward Number`, `Program/Agency Name`, Year) |>
+  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
+  arrange(`Ward Number`, `Program/Agency Name`, Year)
 
 # Yearly Funding per Program/Agency Name for Each Ward Number
 funding_yearly_program_ward |>
@@ -144,6 +149,7 @@ funding_yearly_program_ward |>
         format = "html", 
         caption = "Yearly Funding per Program/Agency Name for Each Ward Number") |>
   kable_styling(full_width = FALSE, position = "center")
+
 
 ## Graphs ##
 
