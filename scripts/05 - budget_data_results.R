@@ -47,15 +47,24 @@ funding_yearly_ward <- budget_data_long |>
   arrange(`Ward Number`, Year)
 
 
+# Total funding per program/agency per ward number 
+total_funding_program_ward <- budget_data_clean |>
+  group_by(`Ward Number`, `Program/Agency Name`) |>
+  summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)) |>
+  arrange(`Ward Number`, desc(Total_Funding))
 
 
-# Aggregate funding by Program/Agency Name and Year
-ward_funding <- ward_data_long |>
-  group_by(`Program/Agency Name`, Year) |>
   summarise(Total_Funding = sum(Funding, na.rm = TRUE)) |>
-  ungroup()
+# Yearly funding per program/agency per ward number - maybe remove later
+funding_yearly_program_ward <- budget_data_long |>
+  group_by(`Ward Number`, `Program/Agency Name`, Year) |>
+  summarise(
+    Funding = sum(Funding, na.rm = TRUE)
+  ) |>
+  arrange(`Ward Number`, `Program/Agency Name`, Year)
 
 
+### Tables and Visualizations ###
 # Visualize funding over years for each Program/Agency Name
 ggplot(ward_funding, aes(x = as.integer(Year), y = Total_Funding, color = `Program/Agency Name`)) +
   geom_line(size = 1) +
@@ -140,10 +149,7 @@ ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward
 
 ## Total funding per Program/Agency per Ward Number
 # Will be important for any service and demographic level analysis if conducted
-total_funding_program_ward <- ward_data_clean |>
-  group_by(`Ward Number`, `Program/Agency Name`) |>
-  summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)) |>
-  arrange(`Ward Number`, desc(Total_Funding))
+
 
 # Total Funding per Program/Agency Name for Each Ward Number
 total_funding_program_ward |>
