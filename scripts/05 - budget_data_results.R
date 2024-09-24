@@ -12,33 +12,42 @@ library(readr)
 library(knitr)
 library(kableExtra)
 
-# names of programs by wards only
-
-ward_data <- read_csv("data/analysis_data/test.csv")
-
+### Data handling ###
+# Import cleaned data 
+budget_data_clean <- read_csv("data/analysis_data/2022-2031-budget_data.csv")
 
 # Identify year columns
 year_cols <- as.character(2022:2031)
 
-clean_funding <- function(x) {
-  x_clean <- ifelse(x == "-", "0", x)
-  x_clean <- str_replace_all(x_clean, ",", "")
-  as.numeric(x_clean)
-}
 
-# Apply the cleaning function to year columns
-ward_data_clean <- ward_data |>
-  mutate(across(all_of(year_cols), clean_funding))
-
-# Change data to Long Format
-ward_data_long <- ward_data_clean |>
+# Reshape data to long format
+budget_data_long <- budget_data_clean %>%
   pivot_longer(
     cols = all_of(year_cols),
     names_to = "Year",
     values_to = "Funding"
   )
 
-## Exploring funding for each program type by year (2022 - 2031) ##
+
+### Summing funding values ### 
+
+# Total overall funding per ward number 
+total_funding_ward <- budget_data_clean |>
+  group_by(`Ward Number`) |>
+  summarise(
+    Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)
+  ) |>
+  arrange(desc(Total_Funding))
+
+
+# Funding for each year per ward number 
+funding_yearly_ward <- budget_data_long |>
+  group_by(`Ward Number`, Year) |>
+  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
+  arrange(`Ward Number`, Year)
+
+
+
 
 # Aggregate funding by Program/Agency Name and Year
 ward_funding <- ward_data_long |>
@@ -72,14 +81,6 @@ ggplot(ward_funding, aes(x = as.integer(Year), y = Total_Funding, color = `Progr
 
 ## Aggregate the data ##
 
-# Total overall funding per Ward Number
-total_funding_ward <- ward_data_long |>
-  group_by(`Ward Number`) |>
-  summarise(
-    Total_Funding = sum(Funding, na.rm = TRUE)
-  ) |>
-  arrange(desc(Total_Funding))
-
 ## Total Overall Funding per Ward Number
 total_funding_ward |>
   arrange(desc(Total_Funding)) |>
@@ -106,10 +107,7 @@ ggplot(total_funding_ward, aes(x = reorder(`Ward Number`, -Total_Funding), y = T
 
 ## Funding per Year per Ward Number
 # Keep this will be useful
-funding_yearly_ward <- ward_data_long |>
-  group_by(`Ward Number`, Year) |>
-  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
-  arrange(`Ward Number`, Year)
+
 
 # Funding for Each Year per Ward Number
 funding_yearly_ward |>
