@@ -16,14 +16,6 @@ library(kableExtra)
 
 ward_data <- read_csv("data/analysis_data/test.csv")
 
-unique_programs <- ward_data |>
-  select('Program/Agency Name') |>
-  distinct()
-
-unique_programs
-
-
-
 
 # Identify year columns
 year_cols <- as.character(2022:2031)
@@ -81,7 +73,6 @@ ggplot(ward_funding, aes(x = as.integer(Year), y = Total_Funding, color = `Progr
 ## Aggregate the data ##
 
 # Total overall funding per Ward Number
-# NOTE: numbers aren't correct but this will still be important so keep 
 total_funding_ward <- ward_data_long |>
   group_by(`Ward Number`) |>
   summarise(
@@ -97,6 +88,20 @@ total_funding_ward |>
         caption = "Total Overall Funding per Ward Number") |>
   kable_styling(full_width = FALSE, position = "center")
 
+# Total Overall Funding per Ward Number
+ggplot(total_funding_ward, aes(x = reorder(`Ward Number`, -Total_Funding), y = Total_Funding)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(
+    title = "Total Overall Funding per Ward Number",
+    x = "Ward Number",
+    y = "Total Funding"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.title = element_text(size = 14)
+  )
 
 
 ## Funding per Year per Ward Number
@@ -114,60 +119,6 @@ funding_yearly_ward |>
         format = "html", 
         caption = "Yearly Funding per Ward Number") |>
   kable_styling(full_width = FALSE, position = "center")
-
-
-
-## Total funding per Program/Agency per Ward Number
-# Keep because it will be important for any service and demographic level analysis
-total_funding_program_ward <- ward_data_clean |>
-  group_by(`Ward Number`, `Program/Agency Name`) |>
-  summarise(Total_Funding = sum(`2022`:`2031`, na.rm = TRUE)) |>
-  arrange(`Ward Number`, desc(Total_Funding))
-
-# Total Funding per Program/Agency Name for Each Ward Number
-total_funding_program_ward |>
-  arrange(`Ward Number`, desc(Total_Funding)) |>
-  kable(col.names = c("Ward Number", "Program/Agency Name", "Total Funding"), 
-        format = "html", 
-        caption = "Total Funding per Program/Agency Name for Each Ward Number") |>
-  kable_styling(full_width = FALSE, position = "center")
-
-
-
-
-## Yearly funding per Program/Agency per Ward Number
-# Keep for now but might be too detailed 
-funding_yearly_program_ward <- ward_data_long |>
-  group_by(`Ward Number`, `Program/Agency Name`, Year) |>
-  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
-  arrange(`Ward Number`, `Program/Agency Name`, Year)
-
-# Yearly Funding per Program/Agency Name for Each Ward Number
-funding_yearly_program_ward |>
-  arrange(`Ward Number`, `Program/Agency Name`, Year) |>
-  pivot_wider(names_from = Year, values_from = Funding) |>
-  kable(col.names = c("Ward Number", "Program/Agency Name", as.character(2022:2031)), 
-        format = "html", 
-        caption = "Yearly Funding per Program/Agency Name for Each Ward Number") |>
-  kable_styling(full_width = FALSE, position = "center")
-
-
-## Graphs ##
-
-# Total Overall Funding per Ward Number
-ggplot(total_funding_ward, aes(x = reorder(`Ward Number`, -Total_Funding), y = Total_Funding)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  labs(
-    title = "Total Overall Funding per Ward Number",
-    x = "Ward Number",
-    y = "Total Funding"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    axis.title = element_text(size = 14)
-  )
 
 # Funding Trends Over Years per Ward Number
 ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward Number`)) +
@@ -188,6 +139,23 @@ ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward
     legend.title = element_text(size = 13),
     legend.text = element_text(size = 11)
   )
+
+## Total funding per Program/Agency per Ward Number
+# Will be important for any service and demographic level analysis if conducted
+total_funding_program_ward <- ward_data_clean |>
+  group_by(`Ward Number`, `Program/Agency Name`) |>
+  summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)) |>
+  arrange(`Ward Number`, desc(Total_Funding))
+
+# Total Funding per Program/Agency Name for Each Ward Number
+total_funding_program_ward |>
+  arrange(`Ward Number`, desc(Total_Funding)) |>
+  kable(col.names = c("Ward Number", "Program/Agency Name", "Total Funding"), 
+        format = "html", 
+        caption = "Total Funding per Program/Agency Name for Each Ward Number") |>
+  kable_styling(full_width = FALSE, position = "center")
+
+
 
 # Total Funding per Program/Agency Name for Each Ward Number
 ggplot(total_funding_program_ward, aes(x = reorder(`Program/Agency Name`, -Total_Funding), y = Total_Funding, fill = `Program/Agency Name`)) +

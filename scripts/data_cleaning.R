@@ -1,18 +1,16 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Cleans the raw data downloaded into a format which can be analyzed
+# Author: Maria Mangru
+# Date: September 2024
+# Contact: maria.mangru@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
 
 #### Workspace setup ####
 library(dplyr)
 library(tidyverse)
 library(readr)
 
-#### Clean data ####
+#### Data Cleaning ####
 # clean ward profile 
 ward_profile <- read_csv("data/raw_data/2023-WardProfiles-2011-2021-CensusData.csv")
 
@@ -30,7 +28,7 @@ view(filtered_budget_data)
 
 
 #### Save data ####
-write_csv(filtered_budget_data, "data/analysis_data/test.csv")
+write_csv(filtered_budget_data, "data/analysis_data/2022-2031-budget_data.csv")
 
 
 
