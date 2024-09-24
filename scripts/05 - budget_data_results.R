@@ -11,6 +11,7 @@ library(tidyverse)
 library(readr)
 library(knitr)
 library(kableExtra)
+library(scales)
 
 ### Data handling ###
 # Import cleaned data 
@@ -54,7 +55,6 @@ total_funding_program_ward <- budget_data_clean |>
   arrange(`Ward Number`, desc(Total_Funding))
 
 
-  summarise(Total_Funding = sum(Funding, na.rm = TRUE)) |>
 # Yearly funding per program/agency per ward number - maybe remove later
 funding_yearly_program_ward <- budget_data_long |>
   group_by(`Ward Number`, `Program/Agency Name`, Year) |>
@@ -65,80 +65,111 @@ funding_yearly_program_ward <- budget_data_long |>
 
 
 ### Tables and Visualizations ###
-# Visualize funding over years for each Program/Agency Name
-ggplot(ward_funding, aes(x = as.integer(Year), y = Total_Funding, color = `Program/Agency Name`)) +
-  geom_line(size = 1) +
-  geom_point(size = 2) +
-  labs(
-    title = "Funding Over Years by Program/Agency",
-    x = "Year",
-    y = "Total Funding",
-    color = "Program/Agency Name"
-  ) +
-  theme_minimal() +
-  scale_x_continuous(breaks = 2022:2031) +
-  theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    axis.text = element_text(size = 12),
-    axis.title = element_text(size = 14),
-    legend.title = element_text(size = 13),
-    legend.text = element_text(size = 11)
-  )
 
-
-## Funding by ward ##
-
-## Aggregate the data ##
-
-## Total Overall Funding per Ward Number
-total_funding_ward |>
-  arrange(desc(Total_Funding)) |>
-  kable(col.names = c("Ward Number", "Total Funding"), 
-        format = "html", 
-        caption = "Total Overall Funding per Ward Number") |>
-  kable_styling(full_width = FALSE, position = "center")
+## Tables ## 
 
 # Total Overall Funding per Ward Number
-ggplot(total_funding_ward, aes(x = reorder(`Ward Number`, -Total_Funding), y = Total_Funding)) +
+total_funding_ward_table <- total_funding_ward |>
+  arrange(desc(Total_Funding)) |>
+  mutate(`Total Funding` = dollar(Total_Funding)) |>
+  select(`Ward Number`, `Total Funding`)
+
+total_funding_ward_table |>
+  kable(
+    col.names = c("Ward Number", "Total Funding"),
+    format = "html",
+    caption = "Total Overall Funding per Ward Number"
+  ) |>
+  kable_styling(full_width = FALSE, position = "center") |>
+  column_spec(2, bold = TRUE, color = "white", background = "darkblue")
+
+
+# Yearly Funding per Ward Number
+
+funding_yearly_ward_table <- funding_yearly_ward |>
+  pivot_wider(names_from = Year, values_from = Funding, values_fill = 0) %>%
+  mutate_at(vars(all_of(year_cols)), ~ dollar(.)) |>
+  arrange(`Ward Number`)
+
+funding_yearly_ward_table|>
+  kable(
+    col.names = c("Ward Number", year_cols),
+    format = "html",
+    caption = "Yearly Funding for Wards"
+  )|>
+  kable_styling(full_width = TRUE, position = "center") |>
+  scroll_box(width = "100%", height = "300px")
+
+# Total Funding per Program/Agency Name for Each Ward Number
+total_funding_program_ward_table <- total_funding_program_ward |>
+  mutate(`Total Funding` = dollar(Total_Funding)) |>
+  arrange(`Ward Number`, desc(Total_Funding)) |>
+  select(`Ward Number`, `Program/Agency Name`, `Total Funding`)
+
+# Display the table with styling
+total_funding_program_ward_table %>%
+  kable(
+    col.names = c("Ward Number", "Program/Agency Name", "Total Funding"),
+    format = "html",
+    caption = "Total Funding per Program/Agency Name for Each Ward Number (Top 10 Programs)"
+  ) %>%
+  kable_styling(full_width = FALSE, position = "center") %>%
+  column_spec(3, bold = TRUE, color = "white", background = "darkgreen")
+
+# 1.4. Yearly Funding per Program/Agency Name for Selected Wards
+selected_wards <- c("1", "10")  # Example: Ward 1 and Ward 10
+
+funding_yearly_program_ward_table <- funding_yearly_program_ward %>%
+  filter(`Ward Number` %in% selected_wards) %>%
+  pivot_wider(names_from = Year, values_from = Funding, values_fill = 0) %>%
+  mutate_at(vars(all_of(year_cols)), ~ dollar(.)) %>%
+  arrange(`Ward Number`, `Program/Agency Name`)
+
+# Display the table with scrollable box
+funding_yearly_program_ward_table %>%
+  kable(
+    col.names = c("Ward Number", "Program/Agency Name", year_cols),
+    format = "html",
+    caption = "Yearly Funding per Program/Agency Name for Selected Wards"
+  ) %>%
+  kable_styling(full_width = TRUE, position = "center") %>%
+  scroll_box(width = "100%", height = "300px")
+
+### 2. Graphs ###
+
+# 2.1. Bar Chart: Top 10 Wards by Total Funding
+ggplot(total_funding_ward %>% top_n(10, Total_Funding), aes(x = reorder(`Ward Number`, Total_Funding), y = Total_Funding)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   labs(
-    title = "Total Overall Funding per Ward Number",
+    title = "Top 10 Wards by Total Funding",
     x = "Ward Number",
     y = "Total Funding"
   ) +
+  scale_y_continuous(labels = dollar_format()) +
   theme_minimal() +
   theme(
     plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
     axis.title = element_text(size = 14)
   )
 
+# 2.2. Line Chart: Funding Trends Over Years for Top 5 Wards
+top_5_wards <- total_funding_ward %>%
+  top_n(5, Total_Funding) %>%
+  pull(`Ward Number`)
 
-## Funding per Year per Ward Number
-# Keep this will be useful
-
-
-# Funding for Each Year per Ward Number
-funding_yearly_ward |>
-  pivot_wider(names_from = Year, values_from = Funding) |>
-  arrange(`Ward Number`) |>
-  kable(col.names = c("Ward Number", as.character(2022:2031)), 
-        format = "html", 
-        caption = "Yearly Funding per Ward Number") |>
-  kable_styling(full_width = FALSE, position = "center")
-
-# Funding Trends Over Years per Ward Number
-ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward Number`)) +
+ggplot(funding_yearly_ward %>% filter(`Ward Number` %in% top_5_wards), aes(x = as.integer(Year), y = Funding, color = `Ward Number`)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
   labs(
-    title = "Funding Trends Over Years per Ward Number",
+    title = "Funding Trends Over Years for Top 5 Wards",
     x = "Year",
     y = "Funding",
     color = "Ward Number"
   ) +
-  theme_minimal() +
   scale_x_continuous(breaks = 2022:2031) +
+  scale_y_continuous(labels = dollar_format()) +
+  theme_minimal() +
   theme(
     plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
     axis.text = element_text(size = 12),
@@ -147,34 +178,30 @@ ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward
     legend.text = element_text(size = 11)
   )
 
-## Total funding per Program/Agency per Ward Number
-# Will be important for any service and demographic level analysis if conducted
+# 2.3. Bar Chart: Total Funding per Top 5 Program/Agency Names for Each Ward Number
+top_5_programs <- total_funding_program_ward %>%
+  group_by(`Program/Agency Name`) %>%
+  summarise(Total = sum(Total_Funding)) %>%
+  top_n(5, Total) %>%
+  pull(`Program/Agency Name`)
 
-
-# Total Funding per Program/Agency Name for Each Ward Number
-total_funding_program_ward |>
-  arrange(`Ward Number`, desc(Total_Funding)) |>
-  kable(col.names = c("Ward Number", "Program/Agency Name", "Total Funding"), 
-        format = "html", 
-        caption = "Total Funding per Program/Agency Name for Each Ward Number") |>
-  kable_styling(full_width = FALSE, position = "center")
-
-
-
-# Total Funding per Program/Agency Name for Each Ward Number
-ggplot(total_funding_program_ward, aes(x = reorder(`Program/Agency Name`, -Total_Funding), y = Total_Funding, fill = `Program/Agency Name`)) +
+ggplot(total_funding_program_ward %>% filter(`Program/Agency Name` %in% top_5_programs), 
+       aes(x = reorder(`Program/Agency Name`, Total_Funding), y = Total_Funding, fill = `Program/Agency Name`)) +
   geom_bar(stat = "identity") +
   labs(
-    title = "Total Funding per Program/Agency Name for Each Ward Number",
+    title = "Total Funding per Top 5 Program/Agency Names for Each Ward",
     x = "Program/Agency Name",
     y = "Total Funding"
   ) +
+  scale_y_continuous(labels = dollar_format()) +
   theme_minimal() +
   facet_wrap(~ `Ward Number`, scales = "free_y") +
   theme(
     plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
     axis.title = element_text(size = 14),
     legend.position = "none"
   )
+
+
 
