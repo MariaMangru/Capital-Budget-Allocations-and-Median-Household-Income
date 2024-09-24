@@ -1,26 +1,28 @@
 #### Preamble ####
-# Purpose: Downloads and saves the data from [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Downloads data from Open Data Toronto 
+# Author: Maria Mangru
+# Date: September 2024
+# Contact: maria.mangru@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
 
 
 #### Workspace setup ####
 library(opendatatoronto)
-library(tidyverse)
-# [...UPDATE THIS...]
+library(dplyr)
+library(readr)
 
 #### Download data ####
-# [...ADD CODE HERE TO DOWNLOAD...]
 
+## Ward Profile Data ##
+ward_profile <- show_package("6678e1a6-d25f-4dff-b2b7-aa8f042bc2eb")
+ward_profile
 
+## 2022 - 2031 Budget Data ##
+raw_budget_data <- show_package("7d3bcf2f-8eca-4ed5-a352-a34adb130931")
+raw_budget_data
 
 #### Save data ####
-# [...UPDATE THIS...]
-# change the_raw_data to whatever name you assigned when you downloaded it.
-write_csv(the_raw_data, "inputs/data/raw_data.csv") 
+write_csv(ward_profile, "data/raw_data/WardData.csv") 
+write_csv(ward_profile, "data/raw_data/BudgetData.csv") 
 
          

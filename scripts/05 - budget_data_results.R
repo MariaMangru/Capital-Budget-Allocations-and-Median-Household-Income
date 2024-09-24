@@ -106,42 +106,37 @@ total_funding_program_ward_table <- total_funding_program_ward |>
   arrange(`Ward Number`, desc(Total_Funding)) |>
   select(`Ward Number`, `Program/Agency Name`, `Total Funding`)
 
-# Display the table with styling
-total_funding_program_ward_table %>%
+total_funding_program_ward_table |>
   kable(
     col.names = c("Ward Number", "Program/Agency Name", "Total Funding"),
     format = "html",
-    caption = "Total Funding per Program/Agency Name for Each Ward Number (Top 10 Programs)"
-  ) %>%
-  kable_styling(full_width = FALSE, position = "center") %>%
+    caption = "Total Funding per Program/Agency Name for Each Ward Number"
+  ) |>
+  kable_styling(full_width = FALSE, position = "center") |>
   column_spec(3, bold = TRUE, color = "white", background = "darkgreen")
 
-# 1.4. Yearly Funding per Program/Agency Name for Selected Wards
-selected_wards <- c("1", "10")  # Example: Ward 1 and Ward 10
-
-funding_yearly_program_ward_table <- funding_yearly_program_ward %>%
-  filter(`Ward Number` %in% selected_wards) %>%
-  pivot_wider(names_from = Year, values_from = Funding, values_fill = 0) %>%
-  mutate_at(vars(all_of(year_cols)), ~ dollar(.)) %>%
+# Yearly Funding per Program/Agency Name
+funding_yearly_program_ward_table <- funding_yearly_program_ward |>
+  pivot_wider(names_from = Year, values_from = Funding, values_fill = 0) |>
+  mutate_at(vars(all_of(year_cols)), ~ dollar(.)) |>
   arrange(`Ward Number`, `Program/Agency Name`)
 
-# Display the table with scrollable box
-funding_yearly_program_ward_table %>%
+funding_yearly_program_ward_table |>
   kable(
     col.names = c("Ward Number", "Program/Agency Name", year_cols),
     format = "html",
-    caption = "Yearly Funding per Program/Agency Name for Selected Wards"
-  ) %>%
-  kable_styling(full_width = TRUE, position = "center") %>%
+    caption = "Yearly Funding per Program/Agency Name"
+  ) |>
+  kable_styling(full_width = TRUE, position = "center") |>
   scroll_box(width = "100%", height = "300px")
 
-### 2. Graphs ###
+### Graphs ###
 
-# 2.1. Bar Chart: Top 10 Wards by Total Funding
-ggplot(total_funding_ward %>% top_n(10, Total_Funding), aes(x = reorder(`Ward Number`, Total_Funding), y = Total_Funding)) +
+# Wards by Total Funding
+ggplot(total_funding_ward, aes(x = reorder(`Ward Number`, Total_Funding), y = Total_Funding)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   labs(
-    title = "Top 10 Wards by Total Funding",
+    title = "Wards by Total Funding",
     x = "Ward Number",
     y = "Total Funding"
   ) +
@@ -153,16 +148,12 @@ ggplot(total_funding_ward %>% top_n(10, Total_Funding), aes(x = reorder(`Ward Nu
     axis.title = element_text(size = 14)
   )
 
-# 2.2. Line Chart: Funding Trends Over Years for Top 5 Wards
-top_5_wards <- total_funding_ward %>%
-  top_n(5, Total_Funding) %>%
-  pull(`Ward Number`)
-
-ggplot(funding_yearly_ward %>% filter(`Ward Number` %in% top_5_wards), aes(x = as.integer(Year), y = Funding, color = `Ward Number`)) +
+# Funding Trends Over Years - needs lots of fixing :(
+ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward Number`)) +
   geom_line(size = 1) +
   geom_point(size = 2) +
   labs(
-    title = "Funding Trends Over Years for Top 5 Wards",
+    title = "Funding Trends Over Years",
     x = "Year",
     y = "Funding",
     color = "Ward Number"
@@ -178,14 +169,8 @@ ggplot(funding_yearly_ward %>% filter(`Ward Number` %in% top_5_wards), aes(x = a
     legend.text = element_text(size = 11)
   )
 
-# 2.3. Bar Chart: Total Funding per Top 5 Program/Agency Names for Each Ward Number
-top_5_programs <- total_funding_program_ward %>%
-  group_by(`Program/Agency Name`) %>%
-  summarise(Total = sum(Total_Funding)) %>%
-  top_n(5, Total) %>%
-  pull(`Program/Agency Name`)
-
-ggplot(total_funding_program_ward %>% filter(`Program/Agency Name` %in% top_5_programs), 
+# Total Funding by Program/Agency Names for Each Ward Number - NEEDS LOTS OF FIXING!! CANNOT READ
+ggplot(total_funding_program_ward, 
        aes(x = reorder(`Program/Agency Name`, Total_Funding), y = Total_Funding, fill = `Program/Agency Name`)) +
   geom_bar(stat = "identity") +
   labs(
