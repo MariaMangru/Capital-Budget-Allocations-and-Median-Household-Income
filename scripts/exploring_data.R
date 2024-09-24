@@ -29,10 +29,9 @@ unique_programs
 year_cols <- as.character(2022:2031)
 
 clean_funding <- function(x) {
-  x |>
-    str_replace_all("-", "0") |>
-    str_replace_all(",", "") |>
-    as.numeric()
+  x_clean <- ifelse(x == "-", "0", x)
+  x_clean <- str_replace_all(x_clean, ",", "")
+  as.numeric(x_clean)
 }
 
 # Apply the cleaning function to year columns
@@ -83,9 +82,11 @@ ggplot(ward_funding, aes(x = as.integer(Year), y = Total_Funding, color = `Progr
 
 # Total overall funding per Ward Number
 # NOTE: numbers aren't correct but this will still be important so keep 
-total_funding_ward <- ward_data_clean |>
+total_funding_ward <- ward_data_long |>
   group_by(`Ward Number`) |>
-  summarise(Total_Funding = sum(`2022`:`2031`, na.rm = TRUE)) |>
+  summarise(
+    Total_Funding = sum(Funding, na.rm = TRUE)
+  ) |>
   arrange(desc(Total_Funding))
 
 ## Total Overall Funding per Ward Number
