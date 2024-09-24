@@ -22,7 +22,7 @@ year_cols <- as.character(2022:2031)
 
 
 # Reshape data to long format
-budget_data_long <- budget_data_clean %>%
+budget_data_long <- budget_data_clean |>
   pivot_longer(
     cols = all_of(year_cols),
     names_to = "Year",
