@@ -15,69 +15,57 @@ library(scales)
 
 
 ### Load Data ###
-X2022_2031_budget_data <- read_csv("data/analysis_data/2022-2031-budget_data.csv", col_types = cols(`Ward Number` = col_character()))
-ward_data_clean <- read_csv("data/analysis_data/2023-WardProfile-Data.csv")
+# Budget funding data
+budget_data_clean <- read_csv("data/analysis_data/2022-2031-budget_data.csv")
+
+# Demographic data
+demographic_data <- read_csv("data/analysis_data/demographic_data.csv")
+
+# Ensure that `Ward Number` is consistent in both datasets
+budget_data_clean <- budget_data_clean |>
+  mutate(`Ward Number` = as.integer(`Ward Number`))
+
+demographic_data <- demographic_data |>
+  rename(`Ward Number` = `...1`) |>
+  mutate(`Ward Number` = as.integer(`Ward Number`))
 
 
-### Restructure ##
-# Rename the first column to 'Category' for clarity
-ward_profile_clean <- ward_data_clean |>
-  rename(Category = `...1`) |> 
-  select(-Toronto) |>            
+### Restructure ###
+# Reshape budget data to long format 
+year_cols <- as.character(2022:2031)
+
+budget_data_long <- budget_data_clean %>%
   pivot_longer(
-    cols = starts_with("Ward"),
-    names_to = "Ward Number",
-    values_to = "Value"
-  ) |>
-  pivot_wider(
-    names_from = Category,
-    values_from = Value
+    cols = all_of(year_cols),
+    names_to = "Year",
+    values_to = "Funding"
   )
 
-View(ward_profile_clean)
-
-# Function to clean dollar-formatted strings
-clean_dollar <- function(x){
-  as.numeric(str_replace_all(x, "[$,]", ""))
-}
-
-# Function to clean percentage-formatted strings
-clean_percent <- function(x){
-  as.numeric(str_replace(x, "%", ""))
-}
-
-
-# Apply cleaning functions to appropriate columns
-ward_profile_clean <- ward_profile_clean |>
-  mutate_at(vars(contains("$")), clean_dollar) |>   
-  mutate_at(vars(contains("%")), clean_percent) |>
-  mutate_at(vars(-`Ward Number`), ~ as.numeric(.))    
-
-
-### Combine Data ###
-
-# Perform a left join to combine funding data with ward demographics
-combined_data <- X2022_2031_budget_data |>
-  left_join(ward_profile_clean, by = "Ward Number")
-
-combined_data <- combined_data |>
-  group_by(`Ward Number`) |>
+# Summarize total funding per ward
+total_funding_ward <- budget_data_clean %>%
+  group_by(`Ward Number`) %>%
   summarise(
     Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)
-  ) |>
+  ) %>%
   arrange(desc(Total_Funding))
 
-colnames(ward_profile_clean)
+# Summarize total funding per ward and per program/agency
+total_funding_program_ward <- budget_data_clean %>%
+  group_by(`Ward Number`, `Program/Agency Name`) %>%
+  summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)) %>%
+  arrange(`Ward Number`, desc(Total_Funding))
 
-# Calculate Funding Per Capita
-combined_data <- combined_data |>
-  mutate(
-    Funding_Per_Capita = Total_Funding / "Total Population"
-  )
+# Merge total funding with demographic data
+funding_demographics <- total_funding_ward %>%
+  left_join(demographic_data, by = "Ward Number")
 
-# Calculate Funding as a Percentage of Median Household Income
-combined_data <- combined_data |>
-  mutate(
-    Funding_Per_Median_Income = Total_Funding / `Median total income of households in 2020 ($)`
-  )
+# Inspect the merged data
+head(funding_demographics)
+
+
+
+
+
+
+
 
