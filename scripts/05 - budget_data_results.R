@@ -154,7 +154,7 @@ ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward
     title = "Funding Trends Over Years",
     x = "Year",
     y = "Funding",
-    color = "Ward Number"
+    #color = "Ward Number"
   ) +
   scale_x_continuous(breaks = 2022:2031) +
   scale_y_continuous(labels = dollar_format()) +
@@ -165,25 +165,6 @@ ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward
     axis.title = element_text(size = 14),
     legend.title = element_text(size = 13),
     legend.text = element_text(size = 11)
-  )
-
-# Total Funding by Program/Agency Names for Each Ward Number - NEEDS LOTS OF FIXING!! CANNOT READ
-ggplot(total_funding_program_ward, 
-       aes(x = reorder(`Program/Agency Name`, Total_Funding), y = Total_Funding, fill = `Program/Agency Name`)) +
-  geom_bar(stat = "identity") +
-  labs(
-    title = "Total Funding by Program/Agency Names for Each Ward",
-    x = "Program/Agency Name",
-    y = "Total Funding"
-  ) +
-  scale_y_continuous(labels = dollar_format()) +
-  theme_minimal() +
-  facet_wrap(~ `Ward Number`, scales = "free_y") +
-  theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-    axis.title = element_text(size = 14),
-    legend.position = "none"
   )
 
 
