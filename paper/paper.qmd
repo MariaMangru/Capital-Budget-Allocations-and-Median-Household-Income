@@ -1,118 +1,46 @@
 ---
-title: "Capital Budget Allocations and Median Household Income "
-subtitle: "My subtitle if needed"
+title: "Capital Budget Funding in Toronto"
+subtitle: "An Analysis of the Funding Disparties Across Toronto Wards (2022 - 2031)"
 author: 
   - Maria Mangru 
 thanks: "Code and data are available at: https://github.com/MariaMangru/Capital-Budget-Allocations-and-Median-Household-Income."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This research examines the allocation of capital funding across Toronto's 25 wards and explores how these allocations correspond with various socioeconomic indicators. The analysis reveals significant disparities in per capita funding, with higher-income wards often receiving more funding than lower-income wards."
 format: pdf
 number-sections: true
 bibliography: references.bib
 ---
 
-```{r}
-#| include: false
-#| warning: false
-#| message: false
-
-library(tidyverse)
-library(palmerpenguins)
-```
-
-
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+Toronto, often referred to as a cultural mosaic, is home to a diverse population with roots from all around the world. It is also city where its neighbourhoods vary significantly in income, educational attainment, and demographic makeup. The allocation of capital funding plays an important role in shaping the infrastructure and services available to residents. This impacts their quality of life and access to opportunities.
 
-The remainder of this paper is structured as follows. @sec-data....
+Despite the importance of equitable funding, there is evidence that budget distributions may not align with the needs of different communities. \[Write about these two:https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186789/ , http://neighbourhoodchange.ca/documents/2016/05/walks-etal-2016-income-inequality-toronto-york-rp-238.pdf\]
 
+By analyzing data from the City of Toronto's Capital Budget & Plan, as well as its Ward Profiles, this research finds disparities in per capita funding among the 25 wards. The findings indicate that higher-income wards tend to receive more funding per capita than lower-income wards.
 
+The remainder of the paper is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings. Section \ref{sec-discussion} discussed the implications of the findings as well as limitations and recommendations for next steps.
 
 # Data {#sec-data}
 
 Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 
-```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
-
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
 Talk more about it.
 
 And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
-#| warning: false
-#| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
-```
-
-Talk way more about it. 
-
-
-
-# Results
+# Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
 
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-
-
-
-# Discussion
+# Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
 ## Second discussion point
 
@@ -122,11 +50,6 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 Weaknesses and next steps should also be included.
 
-
-
 \newpage
 
-
 # References
-
-
