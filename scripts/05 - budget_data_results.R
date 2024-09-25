@@ -109,7 +109,6 @@ total_funding_program_ward_table <- total_funding_program_ward |>
 total_funding_program_ward_table |>
   kable(
     col.names = c("Ward Number", "Program/Agency Name", "Total Funding"),
-    format = "html",
     caption = "Total Funding per Program/Agency Name for Each Ward Number"
   ) |>
   kable_styling(full_width = FALSE, position = "center") |>
@@ -124,7 +123,6 @@ funding_yearly_program_ward_table <- funding_yearly_program_ward |>
 funding_yearly_program_ward_table |>
   kable(
     col.names = c("Ward Number", "Program/Agency Name", year_cols),
-    format = "html",
     caption = "Yearly Funding per Program/Agency Name"
   ) |>
   kable_styling(full_width = TRUE, position = "center") |>
@@ -174,7 +172,7 @@ ggplot(total_funding_program_ward,
        aes(x = reorder(`Program/Agency Name`, Total_Funding), y = Total_Funding, fill = `Program/Agency Name`)) +
   geom_bar(stat = "identity") +
   labs(
-    title = "Total Funding per Top 5 Program/Agency Names for Each Ward",
+    title = "Total Funding by Program/Agency Names for Each Ward",
     x = "Program/Agency Name",
     y = "Total Funding"
   ) +
