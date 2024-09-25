@@ -24,23 +24,26 @@ The remainder of the paper is organized as follows: Section \ref{sec-data} descr
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+## Data Sources
 
-Talk more about it.
+This research utilized two primary datasets provided by the City of Toronto's Open Data Portal.
 
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+1.  Capital Budget & Plan By Ward (2022-2031): \\
+This dataset contains the approved capital budget and plan for each of Toronto's 25 wards over a ten-year period from 2022 to 2031. It includes funding allocations for various programs such as Children's Services, Parks, Foresty & Recreation, Transportation Services, and others. The data provides a detailed breakdown of how much funding each ward is set to receive for specific projects and services.
 
+2.  Ward Profiles (2021): \\
+This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment, Immigration Status, Visible Minority Population. [may need to include others, depends on what I decide to go with in the end.]
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults.
+Lots of tables and graphs to be included here once they're properly formatted!
+
 
 
 # Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
 ## Second discussion point
 
@@ -48,7 +51,6 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
 
 \newpage
 
