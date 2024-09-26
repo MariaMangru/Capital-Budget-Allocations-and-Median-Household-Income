@@ -259,7 +259,5 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal()
 
-  
-
 # Save merged data to CSV
 write_csv(merged_data, "data/analysis_data/merged_data.csv")
