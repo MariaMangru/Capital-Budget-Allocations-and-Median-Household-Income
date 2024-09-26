@@ -186,7 +186,7 @@ kable(
   row_spec(21:24, color = "red")
 ```
 
-Wards with a **\*\*** indicate a **Household Median Income** of \$84,000 or less.
+Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 
 # Results {#sec-results}
 
@@ -202,6 +202,29 @@ When comparing per capita funding to household median income, a pattern emerges 
 
 **Figure 1** illustrates this relationship, showing a general upward trend. While there are exceptions—such as **Ward 13**, which has a median income of **\$65,000** but the highest per capita funding—the overall pattern indicates that wealthier wards receive more capital investment.
 
+
+```{r Figure 1, echo=FALSE, message=FALSE, warning=FALSE}
+#| label: fid-householdincome
+
+# Scatter plot of Per Capita Funding vs Median Household Income with ward 13 removed 
+
+filtered_data <- merged_data |>
+  filter(`Ward Number` != 13)
+
+ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2020 ($)`), y = per_capita_funding)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Per Capita Funding vs Median Household Income",
+    x = "Median Household Income ($)",
+    y = "Per Capita Funding ($)"
+  ) +
+  scale_x_continuous(labels = dollar_format()) +
+  scale_y_continuous(labels = dollar_format()) +
+  theme_minimal()
+```
+
+
 FIGURE 1 HERE (MAYBE BOTH WITH WARD 13 AND WITHOUT WARD 13)
 
 ## Per Capita Funding and Low-Income Prevalence
@@ -215,6 +238,27 @@ Analyzing the prevalence of low-income households provides additional insight in
 **Figure 2** demonstrates a downward trend, suggesting that as the prevalence of low-income households increases, per capita funding tends to decrease. This inverse relationship raises concerns about the equitable distribution of city resources.
 
 INSERT FIGURE 2 HERE
+```{r Figure 2, echo=FALSE, message=FALSE, warning=FALSE}
+#| label: fid-lowincome
+
+# Scatter plot of Per Capita Funding vs Median Household Income with ward 13 removed 
+
+filtered_data <- merged_data |>
+  filter(`Ward Number` != 13)
+
+ggplot(filtered_data, aes(x = as.numeric(`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`), y = per_capita_funding)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Per Capita Funding vs Prevalence of low income",
+    x = "Prevalence of low income (%)",
+    y = "Per Capita Funding ($)"
+  ) +
+  scale_x_continuous(labels = percent_format()) +
+  scale_y_continuous(labels = dollar_format()) +
+  theme_minimal()
+```
+```
 
 ## Per Capita Funding and Educational Attainment
 
