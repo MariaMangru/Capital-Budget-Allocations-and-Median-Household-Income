@@ -1,7 +1,7 @@
 #### Preamble ####
-# Purpose: Cleans the raw data downloaded into a format which can be analyzed
+# Purpose: Cleans the raw data downloaded, into a format which can be analyzed
 # Author: Maria Mangru
-# Date: September 2024
+# Date: 27 September 2024
 # Contact: maria.mangru@mail.utoronto.ca
 # License: MIT
 
@@ -9,28 +9,32 @@
 library(dplyr)
 library(tidyverse)
 library(readr)
+library(stringr)
 
 
 #### Data Cleaning ####
 
 ## Ward Profile Data ## 
+
 # Clean ward profile 
 ward_profile <- read_csv("data/raw_data/2023-WardProfiles-2011-2021-CensusData.csv")
 
-# Remove trailing whitespaces from character columns
-ward_profile_clean <- ward_profile |>
-  mutate(across(where(is.character), str_trim))
+# Remove rows with NAs
+ward_profile <- na.omit(ward_profile)
 
 # Save cleaned ward profile data 
-write_csv(ward_profile_clean, "data/analysis_data/2023-WardProfile-Data.csv")
+write_csv(ward_profile, "data/analysis_data/clean_ward_demo_data.csv")
+
 
 
 ## 2022 - 2031 Budget Data ##
+
 # Clean budget data 
 budget_data <- read_csv("data/raw_data/2022-2031-capital-budget-and-plan-details.csv")
 
 # Remove rows where 'Ward Number' is "CW"
-filtered_budget_data <- budget_data[-(which(budget_data$'Ward Number' %in% "CW")),]
+budget_data <- budget_data |>
+  filter(`Ward Number` != "CW")
 
 # Identify year columns
 year_cols <- as.character(2022:2031)
@@ -48,6 +52,6 @@ budget_data_clean <- filtered_budget_data |>
 
 
 # Save cleaned budget data 
-write_csv(budget_data_clean, "data/analysis_data/2022-2031-budget_data.csv")
+write_csv(budget_data_clean, "data/analysis_data/clean_budget_data.csv")
 
 
