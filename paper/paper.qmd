@@ -148,7 +148,10 @@ merged_table_2 <- merged_table_select |>
   mutate(
     # Format Per Capita Funding as dollars
     per_capita_funding = dollar(per_capita_funding),
-    `Median total income of households in 2020 ($)` = dollar(as.numeric(`Median total income of households in 2020 ($)`)),
+      `Median total income of households in 2020 ($)` = paste0(
+      dollar(as.numeric(`Median total income of households in 2020 ($)`)),
+      ifelse(as.numeric(`Median total income of households in 2020 ($)`) <= 84000, "**", "")
+    ),
     `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` = paste0(round(as.numeric(`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`) * 100, 2), "%"),
     `Bachelor’s degree or higher per capita` = paste0(round(as.numeric(`Bachelor’s degree or higher per capita`) * 100, 2), "%"),
     `Total visible minority population per capita` = paste0(round(as.numeric(`Total visible minority population per capita`) * 100, 2), "%")
@@ -177,8 +180,9 @@ kable(
   column_spec(2:3, width = "3cm") |>
   column_spec(4, width = "2cm") |>
   column_spec(5:6, width = "3cm")
-
 ```
+
+Wards with a **\*\*** indicate a **Household Median Income** of \$84,000 or less.
 
 # Results {#sec-results}
 
@@ -188,34 +192,33 @@ Exploring the data reveals substantial disparities in per capita capital funding
 
 When comparing per capita funding to household median income, a pattern emerges that suggests a positive relationship between the two variables. Wards with higher median household incomes tend to receive more capital funding per capita. For instance:
 
-- **Ward 2** has a household median income of **$100,000** and receives **$4,166.43** per capita in funding.
-- **Ward 10**, with a median income of **$89,000**, receives **$4,127.10** per capita.
-- Conversely, **Ward 22**, with a lower median income of **$77,000**, receives only **$192.44** per capita.
+-   **Ward 2** has a household median income of **\$100,000** and receives **\$4,166.43** per capita in funding.
+-   **Ward 10**, with a median income of **\$89,000**, receives **\$4,127.10** per capita.
+-   Conversely, **Ward 22**, with a lower median income of **\$77,000**, receives only **\$192.44** per capita.
 
-**Figure 1** illustrates this relationship, showing a general upward trend. While there are exceptions—such as **Ward 13**, which has a median income of **$65,000** but the highest per capita funding—the overall pattern indicates that wealthier wards receive more capital investment.
+**Figure 1** illustrates this relationship, showing a general upward trend. While there are exceptions—such as **Ward 13**, which has a median income of **\$65,000** but the highest per capita funding—the overall pattern indicates that wealthier wards receive more capital investment.
 
 FIGURE 1 HERE (MAYBE BOTH WITH WARD 13 AND WITHOUT WARD 13)
-
 
 ## Per Capita Funding and Low-Income Prevalence
 
 Analyzing the prevalence of low-income households provides additional insight into funding disparities. Wards with higher percentages of low-income households often receive less per capita funding. For example:
 
-- **Ward 22** has a low-income prevalence of **15%** and receives **$192.44** per capita.
-- **Ward 5**, with **15%** low-income prevalence, receives **$867.02** per capita.
-- In contrast, **Ward 2** has a low-income prevalence of **8%** and receives **$4,166.43** per capita.
+-   **Ward 22** has a low-income prevalence of **15%** and receives **\$192.44** per capita.
+-   **Ward 5**, with **15%** low-income prevalence, receives **\$867.02** per capita.
+-   In contrast, **Ward 2** has a low-income prevalence of **8%** and receives **\$4,166.43** per capita.
 
 **Figure 2** demonstrates a downward trend, suggesting that as the prevalence of low-income households increases, per capita funding tends to decrease. This inverse relationship raises concerns about the equitable distribution of city resources.
 
-INSERT FIGURE 2 HERE 
+INSERT FIGURE 2 HERE
 
 ## Per Capita Funding and Educational Attainment
 
 Educational attainment appears to correlate strongly with funding allocations. Wards where a higher percentage of residents hold a bachelor's degree or higher tend to receive more per capita funding. Notable examples include:
 
-- **Ward 10**, where **60.97%** of residents have at least a bachelor's degree, receives **$4,127.10** per capita.
-- **Ward 11**, with **56.07%** of residents holding a bachelor's degree or higher, receives **$1,637.81** per capita.
-- Conversely, **Ward 7**, with only **14.67%** educational attainment at this level, receives **$852.05** per capita.
+-   **Ward 10**, where **60.97%** of residents have at least a bachelor's degree, receives **\$4,127.10** per capita.
+-   **Ward 11**, with **56.07%** of residents holding a bachelor's degree or higher, receives **\$1,637.81** per capita.
+-   Conversely, **Ward 7**, with only **14.67%** educational attainment at this level, receives **\$852.05** per capita.
 
 **Figure 3** shows a clear upward trend, indicating that higher educational attainment within a ward is associated with increased capital funding per capita.
 
@@ -225,9 +228,9 @@ FIGURE 3 HERE !!!
 
 The relationship between per capita funding and the percentage of visible minority populations is complex. Some wards with higher percentages of visible minorities receive lower per capita funding. For instance:
 
-- **Ward 22** has a visible minority population of **82.31%** and receives **$192.44** per capita.
-- **Ward 23**, with a visible minority population of **92.18%**, receives **$1,829.15** per capita.
-- In contrast, **Ward 2**, with a visible minority population of **31.75%**, receives **$4,166.43** per capita.
+-   **Ward 22** has a visible minority population of **82.31%** and receives **\$192.44** per capita.
+-   **Ward 23**, with a visible minority population of **92.18%**, receives **\$1,829.15** per capita.
+-   In contrast, **Ward 2**, with a visible minority population of **31.75%**, receives **\$4,166.43** per capita.
 
 **Figure 4** suggests a slight negative correlation, where wards with higher visible minority populations may receive less funding per capita. However, the relationship is not as pronounced as with other socioeconomic indicators, indicating that additional factors may be at play.
 
@@ -235,8 +238,7 @@ FIGURE 4 HERE!!!
 
 While general trends are observed, outliers like Ward 13 challenge simple interpretations. Despite having a lower median household income and higher low-income prevalence, it receives the highest per capita funding. This anomaly suggests that specific projects or unique circumstances, such as major infrastructure developments or targeted investments, can significantly impact funding levels in certain wards.
 
-
-RESULTS NEED A LOT OF FIXING. THERE IS SOME REDUNDENCY. MAYBE A LOT LOL 
+RESULTS NEED A LOT OF FIXING. THERE IS SOME REDUNDENCY. MAYBE A LOT LOL
 
 # Discussion {#sec-discussion}
 
