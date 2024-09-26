@@ -6,75 +6,11 @@ author:
 thanks: "Code and data are available at: https://github.com/MariaMangru/Capital-Budget-Allocations-and-Median-Household-Income."
 date: today
 date-format: long
-abstract: "This research examines the allocation of capital funding across Toronto's 25 wards and explores how these allocations correspond with various socioeconomic indicators. The analysis reveals significant disparities in per capita funding, with higher-income wards often receiving more funding than lower-income wards."
+abstract: "This research examines the allocation of capital funding across Toronto's 25 wards from 2022 to 2031, examining its relationship with socioeconomic indicators. The results reveal significant disparities in per capita funding, with higher-income wards and those with higher educational attainment receiving disproportionately more investment. Conversely, wards with higher proportions of low-income households and visible minority populations receive less funding per capita."
 format: pdf
 number-sections: true
 bibliography: references.bib
 ---
-
-```{r}
-#| include: false
-#| warning: false
-#| message: false
-
-#### Workspace setup ####
-library(dplyr)
-library(tidyverse)
-library(readr)
-library(knitr)
-library(kableExtra)
-library(scales)
-
-### Data handling ###
-# Import cleaned data 
-budget_data_clean <- read_csv("../data/analysis_data/2022-2031-budget_data.csv")
-
-# Identify year columns
-year_cols <- as.character(2022:2031)
-
-
-# Reshape data to long format
-budget_data_long <- budget_data_clean |>
-  pivot_longer(
-    cols = all_of(year_cols),
-    names_to = "Year",
-    values_to = "Funding"
-  )
-
-### Summing funding values ### 
-
-# Total overall funding per ward number 
-total_funding_ward <- budget_data_clean |>
-  group_by(`Ward Number`) |>
-  summarise(
-    Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)
-  ) |>
-  arrange(desc(Total_Funding))
-
-
-# Funding for each year per ward number 
-funding_yearly_ward <- budget_data_long |>
-  group_by(`Ward Number`, Year) |>
-  summarise(Funding = sum(Funding, na.rm = TRUE)) |>
-  arrange(`Ward Number`, Year)
-
-
-# Total funding per program/agency per ward number 
-total_funding_program_ward <- budget_data_clean |>
-  group_by(`Ward Number`, `Program/Agency Name`) |>
-  summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)) |>
-  arrange(`Ward Number`, desc(Total_Funding))
-
-
-# Yearly funding per program/agency per ward number - maybe remove later
-funding_yearly_program_ward <- budget_data_long |>
-  group_by(`Ward Number`, `Program/Agency Name`, Year) |>
-  summarise(
-    Funding = sum(Funding, na.rm = TRUE)
-  ) |>
-  arrange(`Ward Number`, `Program/Agency Name`, Year)
-
-```
 
 # Introduction
 
@@ -98,32 +34,6 @@ This research utilized two primary datasets provided by the City of Toronto's Op
 
 # Results {#sec-results}
 
-Lots of tables and graphs to be included here once they're properly formatted!
-
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-# Yearly Funding per Ward Number with Total Column
-funding_yearly_ward_table <- funding_yearly_ward |>
-  pivot_wider(names_from = Year, values_from = Funding, values_fill = 0) |> 
-  rowwise() |> 
-  mutate(`Total Funding` = sum(c_across(all_of(year_cols)))) |> 
-  ungroup() |> 
-  mutate_at(vars(all_of(year_cols), `Total Funding`), ~ dollar(.)) |> 
-  arrange(`Ward Number`)
-
-funding_yearly_ward_table |> 
-  kable(
-    col.names = c("Ward Number", year_cols, "Total Funding"),
-    caption = "Yearly Funding for Wards"
-  ) |> 
-
-  kableExtra::kable_styling(bootstrap_options = "condensed", full_width = F, font_size = , position = "center")
-
-```
-
-
-
-
 # Discussion {#sec-discussion}
 
 ## First discussion point {#sec-first-point}
@@ -133,8 +43,6 @@ funding_yearly_ward_table |>
 ## Third discussion point
 
 ## Weaknesses and next steps
-
-
 
 \newpage
 
