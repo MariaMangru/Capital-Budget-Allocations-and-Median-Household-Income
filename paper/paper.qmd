@@ -209,7 +209,8 @@ Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 
 ```{r Figure 1, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-percapitafunding
-#| fig-cap: Figure Showing Per Capita Capital Funding by Ward
+#| fig-cap: Box plot showing Per Capita Capital Funding by Ward
+
 # Wards by Per Capita Funding
 ggplot(merged_data, aes(x = reorder(`Ward Number`, per_capita_funding), y = per_capita_funding)) +
   geom_bar(stat = "identity", fill = "#0072B2") +
@@ -227,22 +228,22 @@ ggplot(merged_data, aes(x = reorder(`Ward Number`, per_capita_funding), y = per_
   )
 ```
 
-
 @fig-percapitafunding gives a visual representation of the per capita funding allocated to each ward. This per capita funding varied widely, ranging from \$173.22 in Ward 15 to \$7,674.47 in Ward 13. This significant variation indicates an uneven distribution of resources which may not align with the needs of all communities. 
 
 
 # Results {#sec-results}
 
-Exploring the data reveals substantial disparities in per capita capital funding across Toronto's 25 wards. The per capita funding ranges dramatically, from as low as \$173.22 in Ward 15 to as high as \$7,674.47 in Ward 13.
-
 ## Per Capita Funding and Household Median Income
 
-Across the household incomes, the average value is \$84,000. This means that 50% of wards have median household incomes of \$84,000 or less. Therefore, we will define a higher income ward as which has a median household income greater than \$84,000. Therefore, When comparing per capita funding to household median income, the pattern of wards with higher median household incomes tend to receive more capital funding per capita. For instance, of the top 5 wards with the highest per capita funding, 4 were higher income. Conversely, of the wards with the 5th lowest per capita funding, 4 were lower income.
+The average income across wards is \$84,000, meaning half of the wards have median incomes at or below this amount. Higher income wards will be categorized as one with a median household income above \$84,000. 
+A positive relationship was observed between per capita funding and median household income as wards above the citywide average \$84,000 generally received more funding per capita. Specifically, among the top five wards in per capita funding, four have median incomes above \$84,000. However, among the bottom five wards, four have median incomes below \$84,000. 
 
-**Figure 1** illustrates this relationship. Ward 13 was removed from the analysis as it causes the data to be skewed and isn't an accurate representation of the relationship. As we can see, the trend line is going upwards which indicates a positive relationship between per capita funding and median household income. That is, as median house income increases, per capita funding typically also increases.
+More specifically, Ward 2, with a high median income of \$100,000, received the second-highest per capita funding at \$4,166.43. In contrast, Ward 22, which has a lower median income of \$77,000, received the second-lowest per capita funding at just \$192.44. This pattern suggests that wealthier wards benefit more from capital investments.
+
 
 ```{r Figure 2, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-householdincome
+#| fig-cap: Scatter plot illustrating the relationship between Per Capita Funding and Median Household Income
 
 # Scatter plot of Per Capita Funding vs Median Household Income with ward 13 removed 
 
@@ -261,6 +262,10 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal()
 ```
+
+@fig-householdincome shows the relationship between the variables, with Ward 13 excluded from the analysis due to its disproportionate impact, which distorts the overall data and does not provide an accurate depiction of the relationship. The upward trend line indicates a positive relationship between per capita funding and median household income. In other words, as median household income rises, per capita funding tends to increase as well.
+
+
 
 ## Per Capita Funding and Low-Income Prevalence
 
@@ -288,6 +293,10 @@ ggplot(filtered_data, aes(x = as.numeric(`Prevalence of low income based on the 
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal()
 ```
+
+
+
+
 
 ## Per Capita Funding and Educational Attainment
 
