@@ -148,10 +148,7 @@ merged_table_2 <- merged_table_select |>
   mutate(
     # Format Per Capita Funding as dollars
     per_capita_funding = dollar(per_capita_funding),
-      `Median total income of households in 2020 ($)` = paste0(
-      dollar(as.numeric(`Median total income of households in 2020 ($)`)),
-      ifelse(as.numeric(`Median total income of households in 2020 ($)`) <= 84000, "**", "")
-    ),
+    `Median total income of households in 2020 ($)` = paste0(dollar(as.numeric(`Median total income of households in 2020 ($)`))),
     `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` = paste0(round(as.numeric(`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`) * 100, 2), "%"),
     `Bachelor’s degree or higher per capita` = paste0(round(as.numeric(`Bachelor’s degree or higher per capita`) * 100, 2), "%"),
     `Total visible minority population per capita` = paste0(round(as.numeric(`Total visible minority population per capita`) * 100, 2), "%")
@@ -176,10 +173,17 @@ kable(
     position = "left",  
     font_size = 7 
   ) |>
+  add_footnote("Rows in red indicate a ward where the Household Median Income is $84,000 or less", notation="alphabet") |>
   column_spec(1, width = "2cm") |>
   column_spec(2:3, width = "3cm") |>
   column_spec(4, width = "2cm") |>
-  column_spec(5:6, width = "3cm")
+  column_spec(5:6, width = "3cm") |>
+  row_spec(1, color = "red") |>
+  row_spec(6, color = "red") |>
+  row_spec(9:10, color = "red") |>
+  row_spec(13:14, color = "red") |>
+  row_spec(17:19, color = "red") |>
+  row_spec(21:24, color = "red")
 ```
 
 Wards with a **\*\*** indicate a **Household Median Income** of \$84,000 or less.
