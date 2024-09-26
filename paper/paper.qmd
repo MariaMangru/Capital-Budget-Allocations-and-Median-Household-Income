@@ -1,8 +1,7 @@
 ---
 title: "Capital Budget Funding in Toronto"
 subtitle: "An Analysis of the Funding Disparties Across Toronto Wards (2022 - 2031)"
-author: 
-  - Maria Mangru 
+author: Maria Mangru 
 thanks: "Code and data are available at: https://github.com/MariaMangru/Capital-Budget-Allocations-and-Median-Household-Income."
 date: today
 date-format: long
@@ -16,7 +15,7 @@ bibliography: references.bib
 
 Toronto, often referred to as a cultural mosaic, is home to a diverse population with roots from all around the world. It is also city where its neighbourhoods vary significantly in income, educational attainment, and demographic makeup. The allocation of capital funding plays a crucial role in developing infrastructure and services which directly impact residents' quality of life and access to opportunities. Equitable distribution of these funds is essential to ensure that all communities within the city can thrive.
 
-Despite the city's commitment to equity, recent studies have raised concerns about the fairness of budget distributions. Research by Walks et al. (2016) \[REFERENCE THIS\] highlights growing income inequality in Toronto's neighborhoods, noting a trend toward the spatial concentration of wealth and poverty. Similarly, Hulchanski (2010) \[REFERENCE THIS\] discusses the "Three Cities" within Toronto, where socioeconomic divisions are becoming more pronounced.
+Despite the city's commitment to equity, recent studies have raised concerns about the fairness of budget distributions. Research by Walks et al. (2016) **\[REFERENCE THIS\]** highlights growing income inequality in Toronto's neighborhoods, noting a trend toward the spatial concentration of wealth and poverty. Similarly, PAPER HERE **\[REFERENCE THIS\]** WHAT IT TALKED ABOUT.
 
 \[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186789/ , http://neighbourhoodchange.ca/documents/2016/05/walks-etal-2016-income-inequality-toronto-york-rp-238.pdf\]
 
@@ -32,13 +31,155 @@ This research utilized two primary datasets provided by the City of Toronto's Op
 
 1.  Capital Budget & Plan By Ward (2022-2031):
 
-    This dataset contains the approved capital budget and plan for each of Toronto's 25 wards over a ten-year period from 2022 to 2031. It includes funding allocations for various programs such as Children's Services, Parks, Foresty & Recreation, Transportation Services, and others. The data provides a detailed breakdown of how much funding each ward is set to receive for specific projects and services.
+This dataset contains the approved capital budget and plan for each of Toronto's 25 wards over a ten-year period from 2022 to 2031. It includes funding allocations for various programs such as Children's Services, Parks, Foresty & Recreation, Transportation Services, and others. The data provides a detailed breakdown of how much funding each ward is set to receive for specific projects and services.
 
 2.  Ward Profiles (2021):
 
-    \newline
 
-    This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment, Immigration Status, Visible Minority Population. \[may need to include others, depends on what I decide to go with in the end.\]
+This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment, Immigration Status, Visible Minority Population. **\[UPDATE THIS\]**
+
+```{r setting up workspace, echo=FALSE, message=FALSE, warning=FALSE}
+#### Workspace setup ####
+library(dplyr)
+library(tidyr)
+library(readr)
+library(knitr)
+library(kableExtra)
+library(scales)
+library(ggplot2)
+library(stringr)
+library(janitor)
+
+
+### Data Handling ###
+
+# Read in the cleaned budget data
+budget_data <- read_csv("../data/analysis_data/clean_budget_data.csv")
+
+# Read in the cleaned demographic data
+demographic_data <- read_csv("../data/analysis_data/clean_ward_demo_data.csv")
+
+# Identify year columns in budget data
+year_cols <- as.character(2022:2031)
+
+# Aggregate total funding per ward number
+total_funding_ward <- budget_data |>
+  group_by(`Ward Number`)|>
+  summarise(
+    total_funding = sum(across(all_of(year_cols)), na.rm = TRUE)
+  ) |>
+  arrange(desc(total_funding))
+
+# Adjust total funding (amounts are in thousands of dollars)
+total_funding_ward <- total_funding_ward |>
+  mutate(total_funding = total_funding * 1000)
+
+# Pivot demographic data from wide to long format
+demographic_long <- demographic_data |>
+  pivot_longer(
+    cols = -category,
+    names_to = "Ward Number",
+    values_to = "Value"
+  )
+
+# Pivot demographic data back to wide format to get one row per ward
+demographic_wide <- demographic_long |>
+  pivot_wider(
+    names_from = category,
+    values_from = Value
+  )
+
+# Convert 'Ward Number' to numeric in both datasets to allow merging
+total_funding_ward$`Ward Number` <- as.numeric(as.character(total_funding_ward$`Ward Number`))
+demographic_wide$`Ward Number` <- as.numeric(as.character(demographic_wide$`Ward Number`))
+
+# Merge budget data with demographic data
+merged_data <- total_funding_ward |>
+  left_join(demographic_wide, by = "Ward Number")
+
+# Convert 'Total Population' to numeric
+merged_data$`Total Population` <- as.numeric(gsub(",", "", merged_data$`Total Population`))
+
+
+# Create per capita funding variable
+merged_data <- merged_data |>
+  mutate(per_capita_funding = total_funding / `Total Population`)
+
+
+# Convert columns from list to double 
+merged_data$`Bachelor’s degree or higher` <- as.numeric(merged_data$`Bachelor’s degree or higher`)
+merged_data$`Total visible minority population` <- as.numeric(merged_data$`Total visible minority population`)
+
+
+#Create per capita bachelor's degree variable
+merged_data <- merged_data |>
+  mutate(`Bachelor’s degree or higher per capita` = `Bachelor’s degree or higher` / `Total Population`)
+
+
+#Create per capita visible minority population variable
+merged_data <- merged_data |>
+  mutate(`Total visible minority population per capita` = `Total visible minority population` / `Total Population`)
+
+```
+
+
+## Data Summary 
+
+```{r summary-stats-table, echo=FALSE, message=FALSE, warning=FALSE}
+#| label: tbl-demographics-stats
+#| tbl-cap: Capital Funding and Socioeconomic Indicators by Ward
+
+
+# Select relevant columns for the table
+merged_table_select <- merged_data |>
+  select(
+    `Ward Number`,
+    per_capita_funding,
+    `Median total income of households in 2020 ($)`,
+    `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`,
+    `Bachelor’s degree or higher per capita`,
+    `Total visible minority population per capita`
+  )
+
+# Arrange by the numeric version of per capita funding before formatting
+merged_table_select <- merged_table_select |>
+  arrange(desc(per_capita_funding))
+
+# Format numeric columns with conditional formatting for LaTeX
+merged_table_2 <- merged_table_select |>
+  mutate(
+    # Format Per Capita Funding as dollars
+    per_capita_funding = dollar(per_capita_funding),
+    `Median total income of households in 2020 ($)` = dollar(as.numeric(`Median total income of households in 2020 ($)`)),
+    `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` = paste0(round(as.numeric(`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`) * 100, 2), "%"),
+    `Bachelor’s degree or higher per capita` = paste0(round(as.numeric(`Bachelor’s degree or higher per capita`) * 100, 2), "%"),
+    `Total visible minority population per capita` = paste0(round(as.numeric(`Total visible minority population per capita`) * 100, 2), "%")
+  )
+
+# Create the table with kable and apply styling
+kable(
+  merged_table_2, 
+  col.names = c(
+    "Ward Number", 
+    "Per Capita Funding", 
+    "Household Median Income", 
+    "Low Income Prevalence", 
+    "Bachelor’s Degree or Higher", 
+    "Visible Minority Population"
+  ), 
+  table.attr = 'style="width:100%; word-wrap: break-word;"'
+) |>
+  kable_styling(
+    bootstrap_options = c("condensed"), 
+    full_width = FALSE,  
+    position = "left",  
+    font_size = 7,  
+  ) |>
+  column_spec(1, width = "1cm") |>
+  column_spec(2:6, width = "3cm")    
+
+```
+
 
 # Results {#sec-results}
 
