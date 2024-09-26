@@ -5,7 +5,7 @@ author: Maria Mangru
 thanks: "Code and data are available at: https://github.com/MariaMangru/Capital-Budget-Allocations-and-Median-Household-Income."
 date: today
 date-format: long
-abstract: "This research examines the allocation of capital funding across Toronto's 25 wards from 2022 to 2031, examining its relationship with socioeconomic indicators. The results reveal significant disparities in per capita funding, with higher-income wards and those with higher educational attainment receiving disproportionately more investment. Conversely, wards with higher proportions of low-income households and visible minority populations receive less funding per capita."
+abstract: "This study examines the allocation of capital funding across Toronto's 25 wards from 2022 to 2031, focusing on its relationship with key socioeconomic factors. The results found that wards with higher median household incomes and greater educational attainment receive more captial funding per capita. Conversely, wards with higher proportions of low-income households and visible minority populations tend to receive less funding per capita."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -13,15 +13,13 @@ bibliography: references.bib
 
 # Introduction
 
-Toronto, often referred to as a cultural mosaic, is home to a diverse population with roots from all around the world. It is also city where its neighbourhoods vary significantly in income, educational attainment, and demographic makeup. The allocation of capital funding plays a crucial role in developing infrastructure and services which directly impact residents' quality of life and access to opportunities. Equitable distribution of these funds is essential to ensure that all communities within the city can thrive.
+Toronto is a city renowned for its cultural diversity, however, it is also a city marked by stark socioeconomic disparities. Each year, Toronto allocates funds through its capital budget to support essential services such as public transit, libraries, parks and water facilities. [REF: https://www.toronto.ca/wp-content/uploads/2017/11/97f7-A170XXXX_Budget_Basics_Understanding-final-web.pdf]. This funding shapes the city's infrastructure and directly impacts residents' quality of life and access to opportunities. 
 
-Despite the city's commitment to equity, recent studies have raised concerns about the fairness of budget distributions. Research by Walks et al. (2016) **\[REFERENCE THIS\]** highlights growing income inequality in Toronto's neighborhoods, noting a trend toward the spatial concentration of wealth and poverty. Similarly, PAPER HERE **\[REFERENCE THIS\]** WHAT IT TALKED ABOUT.
+Despite Toronto's commitment to equity, evidence suggests that wealthier neighborhoods receive a disproportionate share of public investment. Previous reports, such as Walks et al. (2016) [REFERENCE HERE], highlight how income segregation leads to affluent areas accumulating more resources, while low-income neighborhoods face underfunded services. This pattern enhances socioeconomic disparities and hinders the city's overall progress toward inclusivity.
 
-\[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186789/ , http://neighbourhoodchange.ca/documents/2016/05/walks-etal-2016-income-inequality-toronto-york-rp-238.pdf\]
+This research investigates how capital funding from 2022 to 2031 is allocated across Toronto's wards and examines its relationship with median household income, educational attainment, and visible minority populations.  By identifying patterns in funding distribution, we aim to understand whether current investment strategies align with the needs of all communities.
 
-By analyzing data from the City of Toronto's Capital Budget & Plan and Ward Profiles, the study uncovers significant disparities in per capita funding. Notably, higher-income wards and those with higher educational attainment tend to receive more funding per capita than lower-income wards, suggesting a potential misalignment with the needs of less affluent communities.
-
-The remainder of the research is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings through visualizations and statistical summaries. Section \ref{sec-discussion} discusses the implications of these findings, addresses limitations, and offers recommendations for improvements to this research.
+The remainder of the research is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings through visualizations and statistical summaries. Section \ref{sec-discussion} discusses the implications of these findings, addresses limitations, and offers recommendations for further research.
 
 # Data {#sec-data}
 
@@ -35,7 +33,9 @@ This dataset contains the approved capital budget and plan for each of Toronto's
 
 2.  Ward Profiles (2021):
 
-This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment, Immigration Status, Visible Minority Population. **\[UPDATE THIS\]**
+This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment and Visible Minority Population.
+
+These datasets were merged to relate funding and various socioeconomic factors. 
 
 ```{r setting up workspace, echo=FALSE, message=FALSE, warning=FALSE}
 #### Workspace setup ####
@@ -123,6 +123,11 @@ merged_data <- merged_data |>
 
 ## Data Summary
 
+This research focuses on ward-level data, filtering out "City Wide" funding, which represents investments distributed across the entire city rather than specific wards.
+
+
+@tbl-demographics-stats summarizes the results of the research. 
+
 ```{r summary-stats-table, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: tbl-demographics-stats
 #| tbl-cap: Capital Funding and Socioeconomic Indicators by Ward
@@ -189,6 +194,8 @@ kable(
 Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 
 
+@fig-percapitafunding shows a bar chart of the per capita funding allocated for each ward. 
+
 ```{r Figure 1, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-percapitafunding
 # Wards by Per Capita Funding
@@ -208,19 +215,16 @@ ggplot(merged_data, aes(x = reorder(`Ward Number`, per_capita_funding), y = per_
   )
 ```
 
+
 # Results {#sec-results}
 
-Exploring the data reveals substantial disparities in per capita capital funding across Toronto's 25 wards. The per capita funding ranges dramatically, from as low as 173.22 in Ward 15 to as high as 7,674.47 in Ward 13. This significant variation suggests that capital investment is not evenly distributed among the city's wards, prompting questions about the factors influencing these allocations.
+Exploring the data reveals substantial disparities in per capita capital funding across Toronto's 25 wards. The per capita funding ranges dramatically, from as low as \$173.22 in Ward 15 to as high as \$7,674.47 in Ward 13. 
 
 ## Per Capita Funding and Household Median Income
 
-When comparing per capita funding to household median income, a pattern emerges that suggests a positive relationship between the two variables. Wards with higher median household incomes tend to receive more capital funding per capita. For instance:
+ Across the household incomes, the average value is \$84,000. This means that 50% of wards have median household incomes of \$84,000 or less. Therefore, we will define a higher income ward as which has a median household income greater than \$84,000. Therefore, When comparing per capita funding to household median income, the pattern of wards with higher median household incomes tend to receive more capital funding per capita. For instance, of the top 5 wards with the highest per capita funding, 4 were higher income. Conversely, of the wards with the 5th lowest per capita funding, 4 were lower income. 
 
--   **Ward 2** has a household median income of **\$100,000** and receives **\$4,166.43** per capita in funding.
--   **Ward 10**, with a median income of **\$89,000**, receives **\$4,127.10** per capita.
--   Conversely, **Ward 22**, with a lower median income of **\$77,000**, receives only **\$192.44** per capita.
-
-**Figure 1** illustrates this relationship, showing a general upward trend. While there are exceptions—such as **Ward 13**, which has a median income of **\$65,000** but the highest per capita funding—the overall pattern indicates that wealthier wards receive more capital investment.
+**Figure 1** illustrates this relationship. Ward 13 was removed from the analysis as it causes the data to be skewed and isn't an accurate representation of the relationship. As we can see, the trend line is going upwards which indicates a positive relationship between per capita funding and median household income. That is, as median house income increases, per capita funding typically also increases. 
 
 
 ```{r Figure 2, echo=FALSE, message=FALSE, warning=FALSE}
@@ -245,18 +249,10 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
 ```
 
 
-
-
-
-
-
 ## Per Capita Funding and Low-Income Prevalence
 
-Analyzing the prevalence of low-income households provides additional insight into funding disparities. Wards with higher percentages of low-income households often receive less per capita funding. For example:
-
--   **Ward 22** has a low-income prevalence of **15%** and receives **\$192.44** per capita.
--   **Ward 5**, with **15%** low-income prevalence, receives **\$867.02** per capita.
--   In contrast, **Ward 2** has a low-income prevalence of **8%** and receives **\$4,166.43** per capita.
+Analyzing the prevalence of low-income households provides additional insight into funding disparities. Wards with higher percentages of low-income households often receive less per capita funding. A ward is defined as having a higher percentage of low income households if the low income prevalence is 13\% or higher. 
+Therefore, of the top 5 wards for per capita funding, two are classified as low income. Conversely, of the bottom 5 wards for per capita funding, four are classified as low income.
 
 **Figure 2** demonstrates a downward trend, suggesting that as the prevalence of low-income households increases, per capita funding tends to decrease. This inverse relationship raises concerns about the equitable distribution of city resources.
 
@@ -283,9 +279,10 @@ ggplot(filtered_data, aes(x = as.numeric(`Prevalence of low income based on the 
 
 ## Per Capita Funding and Educational Attainment
 
-Educational attainment appears to correlate strongly with funding allocations. Wards where a higher percentage of residents hold a bachelor's degree or higher tend to receive more per capita funding. Notable examples include:
+Educational attainment appears to have a strong positive relationship with funding allocations. Wards where a higher percentage of residents hold a bachelor's degree or higher tend to receive more per capita funding. A higher percentage of residents holding a bachelor's degree or higher is defined as a 33%. 
+Notable examples include:
 
--   **Ward 10**, where **60.97%** of residents have at least a bachelor's degree, receives **\$4,127.10** per capita.
+-   **Ward 10**, where **60.97%** of residents have at least a bachelor's degree, receives **\$4,127.10** per capita, the second highest per capita funding.
 -   **Ward 11**, with **56.07%** of residents holding a bachelor's degree or higher, receives **\$1,637.81** per capita.
 -   Conversely, **Ward 7**, with only **14.67%** educational attainment at this level, receives **\$852.05** per capita.
 
@@ -315,13 +312,16 @@ ggplot(filtered_data, aes(x = as.numeric(`Bachelor’s degree or higher per capi
 
 ## Per Capita Funding and Visible Minority Population
 
-The relationship between per capita funding and the percentage of visible minority populations is complex. Some wards with higher percentages of visible minorities receive lower per capita funding. For instance:
+The relationship between per capita funding and the percentage of visible minority populations is complex. Some wards with higher percentages of visible minorities receive lower per capita funding. A higher percentage of visible minorities is defined as 57% or more. 
 
--   **Ward 22** has a visible minority population of **82.31%** and receives **\$192.44** per capita.
+Of the top 10 per capita funded wards, 4 have a higher percentage of visible minorities. While for the 10 lowest per capita funded, 6 have a higher percentage of visible minorities. 
+More specifically:
+
+-   **Ward 22** has a visible minority population of **82.31%** and receives **\$192.44** per capita. This is the 2nd lowest per capita funding. 
 -   **Ward 23**, with a visible minority population of **92.18%**, receives **\$1,829.15** per capita.
 -   In contrast, **Ward 2**, with a visible minority population of **31.75%**, receives **\$4,166.43** per capita.
 
-**Figure 4** suggests a slight negative correlation, where wards with higher visible minority populations may receive less funding per capita. However, the relationship is not as pronounced as with other socioeconomic indicators, indicating that additional factors may be at play.
+**Figure 4** suggests a slight negative relationship, where wards with higher visible minority populations may receive less funding per capita. However, the relationship is not as pronounced as with other socioeconomic indicators, indicating that additional factors may be at play.
 
 ```{r Figure 5, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-minority
@@ -345,9 +345,8 @@ ggplot(filtered_data, aes(x = as.numeric(`Total visible minority population per 
 ```
 
 
-While general trends are observed, outliers like Ward 13 challenge simple interpretations. Despite having a lower median household income and higher low-income prevalence, it receives the highest per capita funding. This anomaly suggests that specific projects or unique circumstances, such as major infrastructure developments or targeted investments, can significantly impact funding levels in certain wards.
+There are outliers such as Ward 23, where 92.18% of residents are visible minorities, yet the ward receives $1,829.15 per capita. However, the general trend suggests that wards with larger visible minority populations tend to receive less funding overall, raising concerns about whether capital funding is being equitably distributed in alignment with the needs of these communities.
 
-RESULTS NEED A LOT OF FIXING. THERE IS SOME REDUNDENCY. MAYBE A LOT LOL
 
 # Discussion {#sec-discussion}
 
