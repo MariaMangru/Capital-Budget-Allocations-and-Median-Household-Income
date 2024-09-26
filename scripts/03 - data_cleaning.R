@@ -47,7 +47,7 @@ clean_funding <- function(x) {
 }
 
 # Apply the cleaning function to year columns
-budget_data_clean <- filtered_budget_data |>
+budget_data_clean <- budget_data |>
   mutate(across(all_of(year_cols), clean_funding))
 
 
