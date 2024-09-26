@@ -14,13 +14,15 @@ bibliography: references.bib
 
 # Introduction
 
-Toronto, often referred to as a cultural mosaic, is home to a diverse population with roots from all around the world. It is also city where its neighbourhoods vary significantly in income, educational attainment, and demographic makeup. The allocation of capital funding plays an important role in shaping the infrastructure and services available to residents. This impacts their quality of life and access to opportunities.
+Toronto, often referred to as a cultural mosaic, is home to a diverse population with roots from all around the world. It is also city where its neighbourhoods vary significantly in income, educational attainment, and demographic makeup. The allocation of capital funding plays a crucial role in developing infrastructure and services which directly impact residents' quality of life and access to opportunities. Equitable distribution of these funds is essential to ensure that all communities within the city can thrive.
 
-Despite the importance of equitable funding, there is evidence that budget distributions may not align with the needs of different communities. \[Write about these two:https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186789/ , http://neighbourhoodchange.ca/documents/2016/05/walks-etal-2016-income-inequality-toronto-york-rp-238.pdf\]
+Despite the city's commitment to equity, recent studies have raised concerns about the fairness of budget distributions. Research by Walks et al. (2016) \[REFERENCE THIS\] highlights growing income inequality in Toronto's neighborhoods, noting a trend toward the spatial concentration of wealth and poverty. Similarly, Hulchanski (2010) \[REFERENCE THIS\] discusses the "Three Cities" within Toronto, where socioeconomic divisions are becoming more pronounced.
 
-By analyzing data from the City of Toronto's Capital Budget & Plan, as well as its Ward Profiles, this research finds disparities in per capita funding among the 25 wards. The findings indicate that higher-income wards tend to receive more funding per capita than lower-income wards.
+\[https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186789/ , http://neighbourhoodchange.ca/documents/2016/05/walks-etal-2016-income-inequality-toronto-york-rp-238.pdf\]
 
-The remainder of the paper is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings. Section \ref{sec-discussion} discussed the implications of the findings as well as limitations and recommendations for next steps.
+By analyzing data from the City of Toronto's Capital Budget & Plan and Ward Profiles, the study uncovers significant disparities in per capita funding. Notably, higher-income wards and those with higher educational attainment tend to receive more funding per capita than lower-income wards, suggesting a potential misalignment with the needs of less affluent communities.
+
+The remainder of the research is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings through visualizations and statistical summaries. Section \ref{sec-discussion} discusses the implications of these findings, addresses limitations, and offers recommendations for improvements to this research.
 
 # Data {#sec-data}
 
@@ -28,9 +30,15 @@ The remainder of the paper is organized as follows: Section \ref{sec-data} descr
 
 This research utilized two primary datasets provided by the City of Toronto's Open Data Portal.
 
-1.  Capital Budget & Plan By Ward (2022-2031): \\ This dataset contains the approved capital budget and plan for each of Toronto's 25 wards over a ten-year period from 2022 to 2031. It includes funding allocations for various programs such as Children's Services, Parks, Foresty & Recreation, Transportation Services, and others. The data provides a detailed breakdown of how much funding each ward is set to receive for specific projects and services.
+1.  Capital Budget & Plan By Ward (2022-2031):
 
-2.  Ward Profiles (2021): \\ This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment, Immigration Status, Visible Minority Population. \[may need to include others, depends on what I decide to go with in the end.\]
+    This dataset contains the approved capital budget and plan for each of Toronto's 25 wards over a ten-year period from 2022 to 2031. It includes funding allocations for various programs such as Children's Services, Parks, Foresty & Recreation, Transportation Services, and others. The data provides a detailed breakdown of how much funding each ward is set to receive for specific projects and services.
+
+2.  Ward Profiles (2021):
+
+    \newline
+
+    This dataset provides comprehensive socioeconomic information for each ward based on the 2021 census. It was filtered to remain the variables which were most useful for this research. These are: Total Population, Median Household Income, Prevalence of Low Income Households, Educational Attainment, Immigration Status, Visible Minority Population. \[may need to include others, depends on what I decide to go with in the end.\]
 
 # Results {#sec-results}
 
