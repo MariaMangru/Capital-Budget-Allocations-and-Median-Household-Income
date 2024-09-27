@@ -259,5 +259,77 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal()
 
+
 # Save merged data to CSV
 write_csv(merged_data, "data/analysis_data/merged_data.csv")
+
+
+
+
+
+
+### Needs cleaning to better integrate with the rest of the script 
+
+
+# Select top 5 and bottom 5 wards by per capita funding 
+top5_wards <- merged_data |>
+  arrange(desc(per_capita_funding)) |>
+  slice(2:6)
+
+bottom5_wards <- merged_data |>
+  arrange(per_capita_funding)|>
+  slice(1:5)
+
+# Combine these wards 
+selected_wards <- bind_rows(top5_wards, bottom5_wards) |>
+  mutate(Category = ifelse(`Ward Number` %in% top5_wards$`Ward Number`, "Top 5", "Bottom 5"))
+
+selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` <- as.numeric(as.character(selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`))
+
+
+# Calculate scaling factor
+max_funding <- max(selected_wards$per_capita_funding, na.rm = TRUE)
+max_low_income <- max(selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`, na.rm = TRUE)
+scale_factor <- max_funding / max_low_income
+
+# Add a scaled Low Income Prevalence for plotting
+selected_wards <- selected_wards |>
+  mutate(Scaled_Low_Income_Prevalence = `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` * scale_factor)
+
+
+# Create the Combined Bar and Line Chart
+ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
+  geom_bar(aes(y = per_capita_funding, fill = Category), stat = "identity") +
+  geom_line(aes(y = Scaled_Low_Income_Prevalence, group = 1, color = "Low Income Prevalence"), size = 1.2) +
+  geom_point(aes(y = Scaled_Low_Income_Prevalence, color = "Low Income Prevalence"), size = 3) +
+ 
+   scale_y_continuous(
+    name = "Per Capita Funding ($CAD)",
+    labels = dollar_format(),
+    sec.axis = sec_axis(~./scale_factor, name = "Low Income Prevalence")
+  ) +
+  labs(
+    title = "Top 5 and Bottom 5 Wards by Per Capita Funding with Low Income Prevalence",
+    x = "Ward Number",
+    fill = "Category",
+    color = ""
+  ) +
+  
+
+  scale_fill_manual(values = c("Top 5" = "#0072B2", "Bottom 5" = "red")) +
+  scale_color_manual(values = c("Low Income Prevalence" = "black")) +
+  
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    axis.title.y.left = element_text(color = "black", size = 14),
+    axis.title.y.right = element_text(color = "black", size = 14),
+    legend.position = "top",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 12)
+  )
+
+
+
+

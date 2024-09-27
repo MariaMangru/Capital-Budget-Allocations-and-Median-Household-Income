@@ -266,7 +266,6 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
 @fig-householdincome shows the relationship between the variables, with Ward 13 excluded from the analysis due to its disproportionate impact, which distorts the overall data and does not provide an accurate depiction of the relationship. The upward trend line indicates a positive relationship between per capita funding and median household income. In other words, as median household income rises, per capita funding tends to increase as well.
 
 
-
 ## Per Capita Funding and Low-Income Prevalence
 
 Analyzing the prevalence of low-income households provides additional insight into funding disparities. Wards with higher percentages of low-income households often receive less per capita funding. A ward is defined as having a higher percentage of low income households if the low income prevalence is 13% or higher. Therefore, of the top 5 wards for per capita funding, two are classified as low income. Conversely, of the bottom 5 wards for per capita funding, four are classified as low income.
