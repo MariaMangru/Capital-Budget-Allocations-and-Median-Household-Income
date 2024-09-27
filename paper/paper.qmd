@@ -5,7 +5,7 @@ author: Maria Mangru
 thanks: "Code and data are available at: https://github.com/MariaMangru/Capital-Budget-Allocations-and-Median-Household-Income."
 date: today
 date-format: long
-abstract: "This study examines the allocation of capital funding across Toronto's 25 wards from 2022 to 2031, focusing on its relationship with key socioeconomic factors. The results found that wards with higher median household incomes and greater educational attainment receive more captial funding per capita. Conversely, wards with higher proportions of low-income households and visible minority populations tend to receive less funding per capita."
+abstract: "This study examines the allocation of capital funding across Toronto's 25 wards from 2022 to 2031, focusing on its relationship with key socioeconomic factors. The results found that wards with higher median household incomes and greater educational attainment receive more captial funding per capita. Conversely, wards with higher proportions of low-income households and visible minority populations tend to receive less funding per capita. These disparities emphasize the need for a more balanced approach to resource distribution to ensure all communities receive fair and adequate support"
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -17,7 +17,7 @@ Toronto is a city renowned for its cultural diversity, however, it is also a cit
 
 Despite Toronto's commitment to equity, evidence suggests that wealthier neighborhoods receive a disproportionate share of public investment. Previous reports, such as @walks_report, highlight how income segregation leads to affluent areas accumulating more resources, while low-income neighborhoods face underfunded services. This pattern enhances socioeconomic disparities and hinders the city's overall progress toward inclusivity.
 
-This research investigates how capital funding from 2022 to 2031 is allocated across Toronto's wards and examines its relationship with median household income, educational attainment, and visible minority populations. By identifying patterns in funding distribution, we aim to understand whether current investment strategies align with the needs of all communities.
+This research investigates how capital funding from 2022 to 2031 is allocated across Toronto's wards and examines its relationship with median household income, educational attainment, and visible minority populations. By identifying patterns in funding distribution, we aim to understand whether current investment strategies align with the needs of all communities. The findings reveal that wards with higher incomes and educational levels receive more funding per capita, while those with more low-income and higher minority population receive less. 
 
 The remainder of the research is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings through visualizations and statistical summaries. Section \ref{sec-discussion} discusses the implications of these findings, addresses limitations, and offers recommendations for further research.
 
