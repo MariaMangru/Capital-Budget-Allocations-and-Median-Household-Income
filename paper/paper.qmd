@@ -35,7 +35,7 @@ This dataset provides detailed funding allocations for each of Toronto's 25 ward
 
 Based on the 25-Ward model effective from December 1, 2018, this dataset provides comprehensive socioeconomic information derived from the 2021 Census. It includes metrics such as total population, median household income, prevalence of low-income households, educational attainment, and visible minority populations.
 
-These datasets were merged in order to link capital funding allocations with socioeconomic indicators at the ward level. The analysis for this paper was conducted using @citeR, with several packages from the @tidyverse suite such as @readr which was used to read in files, @stringr which was used for data cleaning and @dplyr which was used for data manipulation. Visualizations were created using @ggplot2, and tables were rendered using @knitr.
+These datasets were merged in order to link capital funding allocations with socioeconomic indicators at the ward level. The analysis for this paper was conducted using @citeR, with several packages from the @tidyverse suite such as @readr (for reading in files), @stringr (for data cleaning) and @dplyr (for data manipulation). Visualizations were created using @ggplot2, and tables were rendered using @knitr.
 
 ### Data Collection and Measurement
 
