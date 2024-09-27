@@ -339,16 +339,11 @@ ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
 
 ## Per Capita Funding and Educational Attainment
 
-Educational attainment appears to have a strong positive relationship with funding allocations. Wards where a higher percentage of residents hold a bachelor's degree or higher tend to receive more per capita funding. A higher percentage of residents holding a bachelor's degree or higher is defined as a 33%. Notable examples include:
-
--   **Ward 10**, where **60.97%** of residents have at least a bachelor's degree, receives **\$4,127.10** per capita, the second highest per capita funding.
--   **Ward 11**, with **56.07%** of residents holding a bachelor's degree or higher, receives **\$1,637.81** per capita.
--   Conversely, **Ward 7**, with only **14.67%** educational attainment at this level, receives **\$852.05** per capita.
-
-**Figure 3** shows a clear upward trend, indicating that higher educational attainment within a ward is associated with increased capital funding per capita.
+We will also classify wards where at least 33% of residents hold a bachelor's degree or higher as having high educational attainment. There is a clear positive relationship between educational attainment and per capita funding as wards with higher education levels tend to receive more funding. More specifically, Ward 10, with 60.97% of residents holding a bachelor’s degree, received \$4,127.10 per capita, while Ward 11, with 56.07%, received \$1,637.81 per capita. In contrast, Ward 7, where only 14.67% of residents hold a degree, received just \$852.05 per capita. 
 
 ```{r Figure 4, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-education
+#| fig-cap: Scatter plot illustrating the relationship between Per Capita Funding and Education Levels
 
 # Scatter plot of Per Capita Funding vs Bachelor's Degree of Higher with ward 13 removed 
 
@@ -367,6 +362,10 @@ ggplot(filtered_data, aes(x = as.numeric(`Bachelor’s degree or higher per capi
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal()
 ```
+
+The trend line in @fig-education illustrates that, generally, wards with a higher percentage of degree holders are more likely to see higher per capita funding allocations. Ward 13 was excluded from this analysis due to its skewing effect on the data.
+
+
 
 ## Per Capita Funding and Visible Minority Population
 
