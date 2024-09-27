@@ -205,7 +205,7 @@ kable(
     position = "left",  
     font_size = 7 
   ) |>
-  footnote(general =  "Rows in red indicate a ward where the Household Median Income is $84,000 or less.") |>
+  footnote(general =  "Rows in red indicate wards with a Household Median Income at or below the average of $84,000.") |>
   column_spec(1, width = "4cm") |>
   column_spec(2, width = "2cm") |>
   column_spec(3, width = "3cm") |>
@@ -219,7 +219,6 @@ kable(
   row_spec(21:24, color = "red")
 ```
 
-Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 
 @tbl-demographics-stats shows the ward specific funding and key demographic indicators. Ward 13 stands out with the highest per capita funding and a high percentage of low income prevalence, relative to other wards.
 
@@ -238,9 +237,9 @@ ggplot(merged_data, aes(x = reorder(`Ward`, per_capita_funding), y = per_capita_
     y = "Per Capita Funding ($CAD)"
   ) +
   scale_y_continuous(labels = dollar_format()) +
-  theme_minimal(base_family = "Helvetica") +
+  theme_minimal() +
   theme(
-    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.title = element_text(size = 16, hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
     axis.title = element_text(size = 14),
     axis.text.y = element_text(size = 10)
@@ -300,7 +299,7 @@ bottom5_wards <- merged_data |>
 
 # Combine these wards 
 selected_wards <- bind_rows(top5_wards, bottom5_wards) |>
-  mutate(Category = ifelse(`Ward Number` %in% top5_wards$`Ward Number`, "Top 5", "Bottom 5"))
+  mutate(Category = ifelse(`Ward` %in% top5_wards$`Ward`, "Top 5", "Bottom 5"))
 
 selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` <- as.numeric(as.character(selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`))
 
@@ -316,7 +315,7 @@ selected_wards <- selected_wards |>
 
 
 # Create the Combined Bar and Line Chart
-ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
+ggplot(selected_wards, aes(x = reorder(`Ward`, per_capita_funding))) +
   geom_bar(aes(y = per_capita_funding, fill = Category), stat = "identity") +
   geom_line(aes(y = Scaled_Low_Income_Prevalence, group = 1, color = "Low Income Prevalence"), size = 1.2) +
   geom_point(aes(y = Scaled_Low_Income_Prevalence, color = "Low Income Prevalence"), size = 3) +
@@ -324,11 +323,11 @@ ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
    scale_y_continuous(
     name = "Per Capita Funding ($CAD)",
     labels = dollar_format(),
-    sec.axis = sec_axis(~./scale_factor, name = "Low Income Prevalence")
+    sec.axis = sec_axis(~./scale_factor, name = "Low Income Prevalence (Decimal)")
   ) +
   labs(
     title = "Top 5 and Bottom 5 Wards by Per Capita Funding with Low Income Prevalence",
-    x = "Ward Number",
+    x = "Ward Name - Number",
     fill = "Category",
     color = ""
   ) +
@@ -337,7 +336,7 @@ ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
   scale_fill_manual(values = c("Top 5" = "#0072B2", "Bottom 5" = "red")) +
   scale_color_manual(values = c("Low Income Prevalence" = "black")) +
   
-  theme_minimal(base_family = "Helvetica") +
+  theme_minimal() +
   theme(
     plot.title = element_text(size = 10, hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
