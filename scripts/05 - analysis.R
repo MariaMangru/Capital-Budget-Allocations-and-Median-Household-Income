@@ -272,5 +272,3 @@ ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
     legend.title = element_blank(),
     legend.text = element_text(size = 12)
   )
-
-

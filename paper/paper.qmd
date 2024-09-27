@@ -1,6 +1,6 @@
 ---
-title: "Capital Budget Funding in Toronto"
-subtitle: "An Analysis of the Funding Disparties Across Toronto Wards (2022 - 2031)"
+title: "Uneven Investments in Toronto's Wards"
+subtitle: "An Analysis of Capital Funding Allocation in Toronto's Wards from 2022 to 2031"
 author: Maria Mangru 
 thanks: "Code and data are available at: https://github.com/MariaMangru/Capital-Budget-Allocations-and-Median-Household-Income."
 date: today
