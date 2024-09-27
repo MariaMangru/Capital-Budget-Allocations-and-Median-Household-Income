@@ -205,9 +205,10 @@ kable(
     position = "left",  
     font_size = 7 
   ) |>
-  add_footnote("Rows in red indicate a ward where the Household Median Income is $84,000 or less", notation="alphabet") |>
-  column_spec(1, width = "2cm") |>
-  column_spec(2:3, width = "3cm") |>
+  footnote(general =  "Rows in red indicate a ward where the Household Median Income is $84,000 or less.") |>
+  column_spec(1, width = "4cm") |>
+  column_spec(2, width = "2cm") |>
+  column_spec(3, width = "3cm") |>
   column_spec(4, width = "2cm") |>
   column_spec(5:6, width = "3cm") |>
   row_spec(1, color = "red") |>
@@ -220,8 +221,7 @@ kable(
 
 Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 
-@tbl-demographics-stats shows the ward specific funding and key demographic indicators. Ward 13 stands out with the highest per capita funding and a high percentage of low income prevalence, relative to other wards. 
-
+@tbl-demographics-stats shows the ward specific funding and key demographic indicators. Ward 13 stands out with the highest per capita funding and a high percentage of low income prevalence, relative to other wards.
 
 \newpage
 
@@ -230,34 +230,33 @@ Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 #| fig-cap: Bar graph showing Per Capita Capital Funding by Ward
 
 # Wards by Per Capita Funding
-ggplot(merged_data, aes(x = reorder(`Ward Number`, per_capita_funding), y = per_capita_funding)) +
+ggplot(merged_data, aes(x = reorder(`Ward`, per_capita_funding), y = per_capita_funding)) +
   geom_bar(stat = "identity", fill = "#0072B2") +
   labs(
     title = "Wards by Per Capita Funding",
-    x = "Ward Number",
+    x = "Ward Name - Number",
     y = "Per Capita Funding ($CAD)"
   ) +
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal(base_family = "Helvetica") +
   theme(
     plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
-    axis.title = element_text(size = 14)
-  )
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.title = element_text(size = 14),
+    axis.text.y = element_text(size = 10)
+  ) +
+  coord_flip()
 ```
 
-@fig-percapitafunding gives a visual representation of the per capita funding allocated to each ward. This per capita funding varied widely, ranging from \$173.22 in Ward 15 to \$7,674.47 in Ward 13. This significant variation indicates an uneven distribution of resources which may not align with the needs of all communities. 
-
+@fig-percapitafunding gives a visual representation of the per capita funding allocated to each ward. This per capita funding varied widely, ranging from \$173.22 in Ward 15 to \$7,674.47 in Ward 13. This significant variation indicates an uneven distribution of resources which may not align with the needs of all communities.
 
 # Results {#sec-results}
 
 ## Per Capita Funding and Household Median Income
 
-The average income across wards is \$84,000, meaning half of the wards have median incomes at or below this amount. Higher income wards will be categorized as one with a median household income above \$84,000. 
-A positive relationship was observed between per capita funding and median household income as wards above the citywide average \$84,000 generally received more funding per capita. Specifically, among the top five wards in per capita funding, four have median incomes above \$84,000. However, among the bottom five wards, four have median incomes below \$84,000. 
+The average income across wards is \$84,000, meaning half of the wards have median incomes at or below this amount. Higher income wards will be categorized as one with a median household income above \$84,000. A positive relationship was observed between per capita funding and median household income as wards above the citywide average \$84,000 generally received more funding per capita. Specifically, among the top five wards in per capita funding, four have median incomes above \$84,000. However, among the bottom five wards, four have median incomes below \$84,000.
 
 More specifically, Ward 2, with a high median income of \$100,000, received the second-highest per capita funding at \$4,166.43. In contrast, Ward 22, which has a lower median income of \$77,000, received the second-lowest per capita funding at just \$192.44. This pattern suggests that wealthier wards benefit more from capital investments.
-
 
 ```{r Figure 2, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-householdincome
@@ -283,11 +282,9 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
 
 @fig-householdincome shows the relationship between the variables, with Ward 13 excluded from the analysis due to its disproportionate impact, which distorts the overall data and does not provide an accurate depiction of the relationship. The upward trend line indicates a positive relationship between per capita funding and median household income. In other words, as median household income rises, per capita funding tends to increase as well.
 
-
 ## Per Capita Funding and Low-Income Prevalence
 
 It was found that an inverse relationship exists between per capita funding and the prevalence of low income households. We will classify a ward as having a high percentage of low-income households if the prevalence is 13% or higher, which represents the average low-income prevalence. Among the top five funded wards, only two can be classified as higher low-income prevalence. In contrast, of the bottom five funded wards, four can be classified as having higher low-income prevalence. This suggests that wards with more low-income households receive less capital budget funding.
-
 
 ```{r Figure 3, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-lowincome
@@ -354,10 +351,9 @@ ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
 
 @fig-lowincome compares the top and bottom 5 wards by per capita funding, with the prevalence of low-income households overlaid. The red bars represent the wards with the lowest per capita funding, while the blue bars represent those with the highest. Ward 13 was excluded from this graph due to its skewed impact on the data. The black line shows the prevalence of low-income households, which is generally higher in wards with lower per capita funding. However, even among the top-funded wards, the relationship between per capita funding and low-income prevalence is not perfectly linear, suggesting that while funding tends to be higher in wealthier wards, some lower-income wards still receive significant funding.
 
-
 ## Per Capita Funding and Educational Attainment
 
-We will also classify wards where at least 33% of residents hold a bachelor's degree or higher as having high educational attainment. There is a clear positive relationship between educational attainment and per capita funding as wards with higher education levels tend to receive more funding. More specifically, Ward 10, with 60.97% of residents holding a bachelor’s degree, received \$4,127.10 per capita, while Ward 11, with 56.07%, received \$1,637.81 per capita. In contrast, Ward 7, where only 14.67% of residents hold a degree, received just \$852.05 per capita. 
+We will also classify wards where at least 33% of residents hold a bachelor's degree or higher as having high educational attainment. There is a clear positive relationship between educational attainment and per capita funding as wards with higher education levels tend to receive more funding. More specifically, Ward 10, with 60.97% of residents holding a bachelor’s degree, received \$4,127.10 per capita, while Ward 11, with 56.07%, received \$1,637.81 per capita. In contrast, Ward 7, where only 14.67% of residents hold a degree, received just \$852.05 per capita.
 
 ```{r Figure 4, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-education
@@ -383,13 +379,11 @@ ggplot(filtered_data, aes(x = as.numeric(`Bachelor’s degree or higher per capi
 
 The trend line in @fig-education illustrates that, generally, wards with a higher percentage of degree holders are more likely to see higher per capita funding allocations. Ward 13 was excluded from this analysis due to its skewing effect on the data.
 
-
 ## Per Capita Funding and Visible Minority Population
 
 The relationship between per capita funding and the proportion of visible minority populations appears complex, with signs of potential disparities. Wards with higher visible minority populations often receive less funding per capita. We will consider a ward to have a high percentage of visible minorities if 57% or more of its population falls into this category. 57% represents the average percent of visible minorities across the wards. Among the top ten funded wards, only four have higher proportions of visible minorities, while among the bottom ten, six wards have higher visible minority populations.
 
 Examples highlighting this trend include Ward 22, where 82.31% of the population are visible minorities, and which received only \$192.44 per capita, and Ward 23, with 92.18% visible minorities, which received \$1,829.15 per capita. In contrast, Ward 2, with a lower visible minority population of 31.75%, received significantly more funding at \$4,166.43 per capita. While exceptions exist, the general trend suggests that wards with larger visible minority populations may receive less funding.
-
 
 ```{r Figure 5, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-minority
@@ -415,25 +409,25 @@ ggplot(filtered_data, aes(x = as.numeric(`Total visible minority population per 
 
 @fig-minority illustrates a downward trend between per capita funding and the percentage of visible minority populations across wards, with Ward 13 excluded. As the visible minority population increases, per capita funding tends to decrease. This trend suggests potential disparities in how funding is distributed among wards with higher visible minority populations.
 
-
 # Discussion {#sec-discussion}
 
-This study's examination of capital funding allocation across Toronto's wards reveals patterns that mirror broader socioeconomic dynamics discussed in urban studies literature. The disparities observed align with the findings of Walks et al. (2016) [REFERENCE], who highlight how income segregation in Canadian cities leads to affluent areas accumulating more resources while low-income neighborhoods face underfunded services. These patterns contribute to socio-spatial income inequality, where wealth and resources are unevenly distributed, reinforcing existing socioeconomic divides.
+This study's examination of capital funding allocation across Toronto's wards reveals patterns that mirror broader socioeconomic dynamics discussed in urban studies literature. The disparities observed align with the findings of Walks et al. (2016) \[REFERENCE\], who highlight how income segregation in Canadian cities leads to affluent areas accumulating more resources while low-income neighborhoods face underfunded services. These patterns contribute to socio-spatial income inequality, where wealth and resources are unevenly distributed, reinforcing existing socioeconomic divides.
 
-The unequal distribution of capital funding has significant implications for both present and future generations. Underfunded communities often lack access to essential services such as quality education, healthcare, and public transportation. The National Academies of Sciences, Engineering, and Medicine (2023) [REFERENCE] emphasize that children growing up in low-income households are more likely to experience intergenerational poverty, which can persist without targeted interventions. Limited access to resources in underfunded wards can hinder social mobility and perpetuate cycles of poverty.
+The unequal distribution of capital funding has significant implications for both present and future generations. Underfunded communities often lack access to essential services such as quality education, healthcare, and public transportation. The National Academies of Sciences, Engineering, and Medicine (2023) \[REFERENCE\] emphasize that children growing up in low-income households are more likely to experience intergenerational poverty, which can persist without targeted interventions. Limited access to resources in underfunded wards can hinder social mobility and perpetuate cycles of poverty.
 
-Furthermore, the disparities in funding contribute to a widening wealth gap within the city. Wealthier wards receiving more investment can improve infrastructure, increase property values, and attract further economic development, as discussed by Walks et al. (2016) [REFERENCE]. In contrast, underfunded wards may experience deteriorating infrastructure and services, making them less attractive for investment and leading to economic stagnation. This dynamic exacerbates socioeconomic disparities and can strain social services, as residents in underfunded areas may rely more heavily on social assistance programs due to a lack of access to resources.
+Furthermore, the disparities in funding contribute to a widening wealth gap within the city. Wealthier wards receiving more investment can improve infrastructure, increase property values, and attract further economic development, as discussed by Walks et al. (2016) \[REFERENCE\]. In contrast, underfunded wards may experience deteriorating infrastructure and services, making them less attractive for investment and leading to economic stagnation. This dynamic exacerbates socioeconomic disparities and can strain social services, as residents in underfunded areas may rely more heavily on social assistance programs due to a lack of access to resources.
 
 These findings highlight the broader effects of unequal resource distribution on urban communities. The reinforcement of existing inequalities through funding allocation can lead to increased social stratification, reduced social cohesion, and limited opportunities for residents in disadvantaged areas. Addressing these disparities requires a comprehensive understanding of how funding decisions impact different communities and the implementation of strategies that promote equitable access to resources.
 
-
 ## Weaknesses and next steps
 
-### Weaknesses 
-While this study provides interesting results, there are a few limitations. Firstly, the analysis is limited by the focus on median household income, educational attainment, and visible minority populations, potentially missing other important socioeconomic factors like housing costs, employment rates, and age demographics. Next, the reliance on 2021 census data and projected capital budgets through 2031 may not account for recent changes. Lastly, the methodology also focuses on correlations without examining the underlying causes of funding disparities, such as political priorities or historical patterns. 
+### Weaknesses
 
-### Next Steps 
-To address these limitations, future research should expand the range of socioeconomic variables, such as housing costs and employment rates, to provide a more comprehensive understanding of funding distribution. Longitudinal studies tracking changes in funding and socioeconomic outcomes would help assess the long-term effects of capital investments. Additionally, conducting a comparative study with other cities could reveal best practices for equitable funding. 
+While this study provides interesting results, there are a few limitations. Firstly, the analysis is limited by the focus on median household income, educational attainment, and visible minority populations, potentially missing other important socioeconomic factors like housing costs, employment rates, and age demographics. Next, the reliance on 2021 census data and projected capital budgets through 2031 may not account for recent changes. Lastly, the methodology also focuses on correlations without examining the underlying causes of funding disparities, such as political priorities or historical patterns.
+
+### Next Steps
+
+To address these limitations, future research should expand the range of socioeconomic variables, such as housing costs and employment rates, to provide a more comprehensive understanding of funding distribution. Longitudinal studies tracking changes in funding and socioeconomic outcomes would help assess the long-term effects of capital investments. Additionally, conducting a comparative study with other cities could reveal best practices for equitable funding.
 
 \newpage
 
