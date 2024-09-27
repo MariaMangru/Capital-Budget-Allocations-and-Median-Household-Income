@@ -366,21 +366,16 @@ ggplot(filtered_data, aes(x = as.numeric(`Bachelor’s degree or higher per capi
 The trend line in @fig-education illustrates that, generally, wards with a higher percentage of degree holders are more likely to see higher per capita funding allocations. Ward 13 was excluded from this analysis due to its skewing effect on the data.
 
 
-
 ## Per Capita Funding and Visible Minority Population
 
-The relationship between per capita funding and the percentage of visible minority populations is complex. Some wards with higher percentages of visible minorities receive lower per capita funding. A higher percentage of visible minorities is defined as 57% or more.
+The relationship between per capita funding and the proportion of visible minority populations appears complex, with signs of potential disparities. Wards with higher visible minority populations often receive less funding per capita. We will consider a ward to have a high percentage of visible minorities if 57% or more of its population falls into this category. 57% represents the average percent of visible minorities across the wards. Among the top ten funded wards, only four have higher proportions of visible minorities, while among the bottom ten, six wards have higher visible minority populations.
 
-Of the top 10 per capita funded wards, 4 have a higher percentage of visible minorities. While for the 10 lowest per capita funded, 6 have a higher percentage of visible minorities. More specifically:
+Examples highlighting this trend include Ward 22, where 82.31% of the population are visible minorities, and which received only \$192.44 per capita, and Ward 23, with 92.18% visible minorities, which received \$1,829.15 per capita. In contrast, Ward 2, with a lower visible minority population of 31.75%, received significantly more funding at \$4,166.43 per capita. While exceptions exist, the general trend suggests that wards with larger visible minority populations may receive less funding.
 
--   **Ward 22** has a visible minority population of **82.31%** and receives **\$192.44** per capita. This is the 2nd lowest per capita funding.
--   **Ward 23**, with a visible minority population of **92.18%**, receives **\$1,829.15** per capita.
--   In contrast, **Ward 2**, with a visible minority population of **31.75%**, receives **\$4,166.43** per capita.
-
-**Figure 4** suggests a slight negative relationship, where wards with higher visible minority populations may receive less funding per capita. However, the relationship is not as pronounced as with other socioeconomic indicators, indicating that additional factors may be at play.
 
 ```{r Figure 5, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-minority
+#| fig-cap: Scatter plot illustrating the relationship between Per Capita Funding and Minority Population
 
 # Scatter plot of Per Capita Funding vs Minority Population with ward 13 removed 
 
@@ -400,8 +395,7 @@ ggplot(filtered_data, aes(x = as.numeric(`Total visible minority population per 
   theme_minimal()
 ```
 
-There are outliers such as Ward 23, where 92.18% of residents are visible minorities, yet the ward receives \$1,829.15 per capita. However, the general trend suggests that wards with larger visible minority populations tend to receive less funding overall, raising concerns about whether capital funding is being equitably distributed in alignment with the needs of these communities.
-
+@fig-minority illustrates a downward trend between per capita funding and the percentage of visible minority populations across wards, with Ward 13 excluded. As the visible minority population increases, per capita funding tends to decrease. This trend suggests potential disparities in how funding is distributed among wards with higher visible minority populations.
 
 
 # Discussion {#sec-discussion}
