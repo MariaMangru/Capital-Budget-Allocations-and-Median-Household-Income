@@ -35,7 +35,7 @@ This dataset provides detailed funding allocations for each of Toronto's 25 ward
 
 This dataset provides comprehensive socioeconomic information based on the 2021 census, including total population, median household income, prevalence of low-income households, educational attainment, and visible minority populations.
 
-These datasets were merged in order to link capital funding allocations with socioeconomic indicators at the ward level. The analysis for this paper was conducted using R (REFERENCE), with several packages from the tidyverse suite (REFERENCE WICKHAM ETA) being used for data cleaning, manipulation and visualization. Visualizations were created using ggplot2, and tables were rendered using kableExtra.
+These datasets were merged in order to link capital funding allocations with socioeconomic indicators at the ward level. The analysis for this paper was conducted using R @citeR, with several packages from the tidyverse suite (REFERENCE WICKHAM ETA) being used for data cleaning, manipulation and visualization. Visualizations were created using ggplot2, and tables were rendered using kableExtra.
 
 ```{r setting up workspace, echo=FALSE, message=FALSE, warning=FALSE}
 #### Workspace setup ####
@@ -400,13 +400,19 @@ ggplot(filtered_data, aes(x = as.numeric(`Total visible minority population per 
 
 # Discussion {#sec-discussion}
 
-## First discussion point {#sec-first-point}
+This study's examination of capital funding allocation across Toronto's wards reveals patterns that mirror broader socioeconomic dynamics discussed in urban studies literature. The disparities observed align with the findings of Walks et al. (2016) [REFERENCE], who highlight how income segregation in Canadian cities leads to affluent areas accumulating more resources while low-income neighborhoods face underfunded services. These patterns contribute to socio-spatial income inequality, where wealth and resources are unevenly distributed, reinforcing existing socioeconomic divides.
 
-## Second discussion point
+The unequal distribution of capital funding has significant implications for both present and future generations. Underfunded communities often lack access to essential services such as quality education, healthcare, and public transportation. The National Academies of Sciences, Engineering, and Medicine (2023) emphasize that children growing up in low-income households are more likely to experience intergenerational poverty, which can persist without targeted interventions. Limited access to resources in underfunded wards can hinder social mobility and perpetuate cycles of poverty.
 
-## Third discussion point
+Furthermore, the disparities in funding contribute to a widening wealth gap within the city. Wealthier wards receiving more investment can improve infrastructure, increase property values, and attract further economic development, as discussed by Walks et al. (2016). In contrast, underfunded wards may experience deteriorating infrastructure and services, making them less attractive for investment and leading to economic stagnation. This dynamic exacerbates socioeconomic disparities and can strain social services, as residents in underfunded areas may rely more heavily on social assistance programs due to a lack of access to resources.
+
+These findings highlight the broader effects of unequal resource distribution on urban communities. The reinforcement of existing inequalities through funding allocation can lead to increased social stratification, reduced social cohesion, and limited opportunities for residents in disadvantaged areas. Addressing these disparities requires a comprehensive understanding of how funding decisions impact different communities and the implementation of strategies that promote equitable access to resources.
+
 
 ## Weaknesses and next steps
+
+### Weaknesses 
+
 
 \newpage
 
