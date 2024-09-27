@@ -19,7 +19,15 @@ Despite Toronto's commitment to equity, evidence suggests that wealthier neighbo
 
 This research investigates how capital funding from 2022 to 2031 is allocated across Toronto's wards and examines its relationship with median household income, educational attainment, and visible minority populations. By identifying patterns in funding distribution, we aim to understand whether current investment strategies align with the needs of all communities. The findings reveal that wards with higher incomes and educational levels receive more funding per capita, while those with more low-income and higher minority population receive less. 
 
-The remainder of the research is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings through visualizations and statistical summaries. Section \ref{sec-discussion} discusses the implications of these findings, addresses limitations, and offers recommendations for further research.
+The remainder of the research is organized as follows: Section \ref{sec-data} describes the data sources and methodology used in the analysis. Section \ref{sec-results} presents the results, highlighting key findings through visualizations and statistical summaries. Section \ref{sec-discussion} discusses the implications of these findings, addresses limitations, and offers recommendations for further research. The map provided below was produced by @toronto_maps. 
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#| fig-align: "center"
+#| fig-cap: "Map of the City of Toronto Showing its 25 Wards"
+knitr::include_graphics("../other/images/toronto_wards.png")
+```
+
 
 # Data {#sec-data}
 
@@ -248,7 +256,7 @@ ggplot(merged_data, aes(x = reorder(`Ward`, per_capita_funding), y = per_capita_
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 16, hjust = 0.5),
+    plot.title = element_text(size = 14, hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
     axis.title = element_text(size = 14),
     axis.text.y = element_text(size = 10)
