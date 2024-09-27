@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Downloads data from Open Data Toronto 
 # Author: Maria Mangru
-# Date: September 2024
+# Date: 27 September 2024
 # Contact: maria.mangru@mail.utoronto.ca
 # License: MIT
 
