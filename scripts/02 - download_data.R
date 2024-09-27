@@ -22,7 +22,7 @@ raw_budget_data <- show_package("7d3bcf2f-8eca-4ed5-a352-a34adb130931")
 raw_budget_data
 
 #### Save data ####
-write_csv(ward_profile, "data/raw_data/WardData.csv") 
-write_csv(ward_profile, "data/raw_data/BudgetData.csv") 
+write_csv(ward_profile, "data/raw_data/2023-WardProfiles-2011-2021-CensusData.csv") 
+write_csv(ward_profile, "data/raw_data/2022-2031-capital-budget-and-plan-details.csv") 
 
          
