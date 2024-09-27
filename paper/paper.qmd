@@ -25,17 +25,27 @@ The remainder of the research is organized as follows: Section \ref{sec-data} de
 
 ## Data Sources
 
-This study utilizes two primary datasets provided by the City of Toronto's Open Data Portal.
+This study utilizes two primary datasets provided by the City of Toronto's Open Data Portal [REFERENCE].
 
 1.  Capital Budget & Plan By Ward (2022-2031):
 
-This dataset provides detailed funding allocations for each of Toronto's 25 wards over a ten-year period It covers various programs such as Children's Services, Parks, Forestry & Recreation, and Transportation Services.
+This dataset provides detailed funding allocations for each of Toronto's 25 wards over a ten-year period It covers various programs such as Children's Services, Parks, Forestry & Recreation, and Transportation Services. The budget amounts are in thousands of dollars where a value of 10 represents \$10,000. Additionally, the dataset includes both immediate five-year budgets (Year 1 to Year 5) and subsequent five-year planned budgets (Year 6 to Year 10), with a cumulative total for the ten-year span.
 
 2.  Ward Profiles (2021):
 
-This dataset provides comprehensive socioeconomic information based on the 2021 census, including total population, median household income, prevalence of low-income households, educational attainment, and visible minority populations.
+Based on the 25-Ward model effective from December 1, 2018, this dataset provides comprehensive socioeconomic information derived from the 2021 Census. It includes metrics such as total population, median household income, prevalence of low-income households, educational attainment, and visible minority populations.
 
-These datasets were merged in order to link capital funding allocations with socioeconomic indicators at the ward level. The analysis for this paper was conducted using @citeR, with several packages from the @tidyverse suite being used for data cleaning, manipulation and visualization. Visualizations were created using @ggplot2, and tables were rendered using kableExtra.
+These datasets were merged in order to link capital funding allocations with socioeconomic indicators at the ward level. The analysis for this paper was conducted using @citeR, with several packages from the @tidyverse suite being used for data cleaning, manipulation and visualization. Visualizations were created using @ggplot2, and tables were rendered using kableExtra [REFERENCE].
+
+
+### Data Collection and Measurement 
+
+The Capital Budget & Plan By Ward dataset is manually updated and published annually by the City of Toronto, capturing both approved and planned funding across various programs and projects within each ward. Key attributes include program or agency names, project and sub-project names, annual budget allocations from Year 1 to Year 10, total ten-year budgets, ward numbers and names, and project categories such as infrastructure or community services.
+
+The Ward Profiles dataset includes a wide range of demographic, social, and economic indicators such as population, household information, migration and mobility patterns, indigenous and ethnocultural composition, language and education levels, as well as labor force and income statistics. It should be acknowledged that census data may be subject to sampling and non-response biases, though adjustments are made to mitigate these issues. 
+
+Both datasets present certain limitations. The Capital Budget & Plan By Ward dataset’s manual updates introduce potential for human error and delays in reflecting the most current budget allocations. Similarly, the Ward Profiles dataset excludes data from the 2011 National Household Survey, limiting longitudinal analyses beyond a decade. Adjustments made to align older Census data with current ward boundaries may also introduce inaccuracies or inconsistencies. 
+
 
 ```{r setting up workspace, echo=FALSE, message=FALSE, warning=FALSE}
 #### Workspace setup ####
@@ -137,7 +147,7 @@ merged_data <- merged_data |>
 
 ## Data Preparation
 
-This research focused on ward-specific funding by excluding "City Wide" allocations that are not tied to particular wards. The per capita funding was calculated by dividing each ward's total funding by its population. Similarly, the variables `Educational Attainment` and `Visible Minority Population` were were expressed as percentages by dividing each variable by the ward's population. This was done to standardized the variables allowing the comparison across wards.
+This research focused on ward-specific funding by excluding "City Wide" allocations that are not tied to particular wards. The per capita funding was calculated by dividing each ward's total funding by its population. Similarly, the variables `Educational Attainment` and `Visible Minority Population` were were expressed as percentages by dividing each variable by the ward's population. This was done to standardized the variables allowing the comparison across wards, ensuring that variations in population sizes do not skew the analysis.
 
 The key variables of interest for this research are:
 
@@ -150,6 +160,9 @@ The key variables of interest for this research are:
 -   Educational Attainment: The percentage of residents with a bachelor's degree or higher.
 
 -   Visible Minority Population: The percentage of residents who identify as visible minorities.
+
+
+Although multiple ten-year budget datasets are available, including the 2023-2032 and 2024-2033 Capital Budget & Plan, this study opted to utilize the 2022-2031 Capital Budget & Plan. This is because, the 2022-2031 budget period aligns more closely with the 2021 Ward Profiles, ensuring that the socioeconomic variables and funding allocations are analyzed within a similar timeframe. 
 
 ```{r summary-stats-table, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: tbl-demographics-stats
@@ -426,7 +439,7 @@ While this study provides interesting results, there are a some limitations. Fir
 
 ### Next Steps
 
-To address these limitations, future research should incorporate a broader range of socioeconomic variables, such as housing costs and employment rates, to gain a more comprehensive understanding of funding distribution. Comparative analyses with other cities could also help identify best practices for equitable funding and inform more effective policy decisions
+To address these limitations, future research should incorporate a broader range of socioeconomic variables, such as housing costs and employment rates, to gain a more comprehensive understanding of funding distribution. Comparative analyses with other cities could also help identify best practices for equitable funding and inform more effective policy decisions. Lastly, conducting a longitudinal study of multiple capital budgets over time would be beneficial in evaluating long-term trends in capital investments. 
 
 \newpage
 
