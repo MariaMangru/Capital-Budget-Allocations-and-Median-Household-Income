@@ -119,6 +119,20 @@ merged_data <- merged_data |>
 merged_data <- merged_data |>
   mutate(`Total visible minority population per capita` = `Total visible minority population` / `Total Population`)
 
+# Create a data frame with Ward Names 
+ward_names_df <- data.frame(
+  `Ward Number` = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+                    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+                    21, 22, 23, 24, 25),
+  `Ward Name` = c("Etobicoke North", "Etobicoke Centre", "Etobicoke—Lakeshore", "Parkdale—High Park", "York South—Weston", "York Centre",
+                "Humber River—Black Creek", "Eglinton—Lawrence", "Davenport", "Spadina—Fort York", "University—Rosedale", "Toronto—St. Paul's", "Toronto Centre", "Toronto—Danforth", "Don Valley West", "Don Valley East", "Don Valley North", "Willowdale", "Beaches—East York", "Scarborough Southwest", "Scarborough Centre", "Scarborough—Agincourt", "Scarborough North", "Scarborough Guildwood", "Scarborough—Rouge Park"),
+  check.names = FALSE
+)
+
+# Join ward names into marged data
+merged_data <- merged_data |>
+  left_join(ward_names_df, by = "Ward Number")
+
 ```
 
 ## Data Preparation
@@ -141,11 +155,15 @@ The key variables of interest for this research are:
 #| label: tbl-demographics-stats
 #| tbl-cap: Table Showing Capital Funding and Socioeconomic Indicators by Ward
 
+# Create a combined Ward column
+merged_data <- merged_data |>
+  mutate(`Ward` = paste(`Ward Name`, "-", `Ward Number`))
+
 
 # Select relevant columns for the table
 merged_table_select <- merged_data |>
   select(
-    `Ward Number`,
+    `Ward`, 
     per_capita_funding,
     `Median total income of households in 2020 ($)`,
     `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`,
@@ -173,7 +191,7 @@ kable(
   merged_table_2, 
   escape = TRUE,                   
   col.names = c(
-    "Ward Number", 
+    "Ward Name - Number", 
     "Per Capita Funding", 
     "Household Median Income", 
     "Low Income Prevalence", 

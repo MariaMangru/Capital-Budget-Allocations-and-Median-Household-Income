@@ -195,3 +195,58 @@ Public Spending and Socioeconomic Inequality Examining Capital Funding Allocatio
 
 These titles and subtitles aim to balance clarity and engagement without the use of the colon format.
 
+
+
+4. Formatting column name 
+
+USER:
+I have this code "# Create a data frame with Ward Names 
+ward_names_df <- data.frame(
+  Ward Number = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+                    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+                    21, 22, 23, 24, 25),
+  Ward Name = c("Etobicoke North", "Etobicoke Centre", "Etobicoke—Lakeshore", "Parkdale—High Park", "York South—Weston", "York Centre",
+                "Humber River—Black Creek", "Eglinton—Lawrence", "Davenport", "Spadina—Fort York", "University—Rosedale", "Toronto—St. Paul's", "Toronto Centre", "Toronto—Danforth", "Don Valley West", "Don Valley East", "Don Valley North", "Willowdale", "Beaches—East York", "Scarborough Southwest", "Scarborough Centre", "Scarborough—Agincourt", "Scarborough North", "Scarborough Guildwood", "Scarborough—Rouge Park"))
+
+# Join ward names into marged data
+merged_data <- merged_data |>
+  left_join(ward_names_df, by = "Ward Number")" and when I run "names(ward_names_df)" it returns "[1] "Ward.Number" "Ward.Name" " but I want it to return "[1] "Ward Number" "Ward Name" ". How do I fix this in R?
+
+
+
+ChatGPT said:
+ChatGPT
+This issue arises because R converts non-standard column names (with spaces or special characters) into a standardized format (e.g., Ward.Number instead of Ward Number). This behavior is controlled by the check.names parameter in the data.frame() function, which defaults to TRUE.
+
+To prevent this automatic conversion and retain your original column names, set check.names = FALSE when creating your data frame:
+
+r
+Copy code
+# Create a data frame with Ward Names
+ward_names_df <- data.frame(
+  `Ward Number` = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
+                    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+                    21, 22, 23, 24, 25),
+  `Ward Name` = c("Etobicoke North", "Etobicoke Centre", "Etobicoke—Lakeshore", "Parkdale—High Park", "York South—Weston", "York Centre",
+                "Humber River—Black Creek", "Eglinton—Lawrence", "Davenport", "Spadina—Fort York", "University—Rosedale", "Toronto—St. Paul's", "Toronto Centre", "Toronto—Danforth", "Don Valley West", "Don Valley East", "Don Valley North", "Willowdale", "Beaches—East York", "Scarborough Southwest", "Scarborough Centre", "Scarborough—Agincourt", "Scarborough North", "Scarborough Guildwood", "Scarborough—Rouge Park"),
+  check.names = FALSE  # Prevents conversion of column names
+)
+
+# Verify the column names
+names(ward_names_df)
+Setting check.names = FALSE will ensure that names(ward_names_df) returns:
+
+csharp
+Copy code
+[1] "Ward Number" "Ward Name"
+This will allow you to maintain the exact column names as you defined them.
+
+
+
+
+5. 
+
+
+
+
+
