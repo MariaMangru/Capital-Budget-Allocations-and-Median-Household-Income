@@ -20,7 +20,7 @@ library(janitor)
 
 # Define file paths
 budget_file <- "data/analysis_data/clean_budget_data.csv"
-demo_file <- "data/analysis_data/clean_ward_demo_data.csv"
+demo_file <- "data/analysis_data/clean_ward_data.csv"
 
 # Read in the cleaned budget and demographic data
 budget_data <- read_csv(budget_file)

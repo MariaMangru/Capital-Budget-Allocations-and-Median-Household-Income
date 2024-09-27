@@ -18,7 +18,7 @@ library(here)
 #### Load Cleaned Data ####
 # Load cleaned budget data and ward profile data
 budget_data_clean <- read_csv(here("data", "analysis_data", "clean_budget_data.csv"))
-ward_data_clean <- read_csv(here("data", "analysis_data", "clean_ward_demo_data.csv"))
+ward_data_clean <- read_csv(here("data", "analysis_data", "clean_ward_data.csv"))
 
 # Identify year columns
 year_cols <- as.character(2022:2031)

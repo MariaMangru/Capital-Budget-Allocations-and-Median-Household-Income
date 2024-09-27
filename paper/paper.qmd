@@ -64,7 +64,7 @@ library(janitor)
 budget_data <- read_csv("../data/analysis_data/clean_budget_data.csv")
 
 # Read in the cleaned demographic data
-demographic_data <- read_csv("../data/analysis_data/clean_ward_demo_data.csv")
+demographic_data <- read_csv("../data/analysis_data/clean_ward_data.csv")
 
 # Identify year columns in budget data
 year_cols <- as.character(2022:2031)

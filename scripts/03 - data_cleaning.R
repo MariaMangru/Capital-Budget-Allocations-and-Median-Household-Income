@@ -23,7 +23,7 @@ ward_profile <- read_csv("data/raw_data/2023-WardProfiles-2011-2021-CensusData.c
 ward_profile <- na.omit(ward_profile)
 
 # Save cleaned ward profile data 
-write_csv(ward_profile, "data/analysis_data/clean_ward_demo_data.csv")
+write_csv(ward_profile, "data/analysis_data/clean_ward_data.csv")
 
 
 

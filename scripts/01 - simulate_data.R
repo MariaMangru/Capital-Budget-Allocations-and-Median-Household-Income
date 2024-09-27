@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose:Simulate data 
+# Purpose:Simulate ward profile and budget data
 # Author: Maria Mangru
 # Date: 27 September 2024
 # Contact: maria.mangru@mail.utoronto.ca
@@ -14,7 +14,7 @@ library(readr)
 
 # Simulate ward profile data 
 simulate_ward_profile <- function() {
-  set.seed(403)
+  set.seed(403) # for reproducibility 
   
   ward_numbers <- paste0("Ward", 1:25)
   census_years <- 2011:2021
