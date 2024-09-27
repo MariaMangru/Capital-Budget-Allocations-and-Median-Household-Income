@@ -22,7 +22,7 @@ Afterwards, you'll need to install a few packages in R. These can be installed b
 
 ## Statement on LLM usage
 
-Aspects of the code were written with the help of the large language model ChatGPT. The entire chat history is available in `other/llm/usage.txt`.
+Aspects of the code and research title were written with the help of the large language model ChatGPT. The entire chat history is available in `other/llm/usage.txt`.
 
 ## Contact
 For any questions or feedback, please reach out to me at maria.mangru@mail.utoronto.ca or create an issue in the repository. Thank you!
