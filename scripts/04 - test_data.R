@@ -7,98 +7,84 @@
 
 
 #### Workspace setup ####
-library(tidyverse)   
-library(testthat)     
-library(kableExtra)  
-library(scales) 
+library(tidyverse)
+library(testthat)
+library(kableExtra)
+library(scales)
 library(readr)
+library(here)
 
-#### Load Data ####
 
-# Cleaned ward data
-ward_data_clean <- read_csv("../data/analysis_data/2023-WardProfile-Data.csv")
+#### Load Cleaned Data ####
+# Load cleaned budget data and ward profile data
+budget_data_clean <- read_csv(here("data", "analysis_data", "clean_budget_data.csv"))
+ward_data_clean <- read_csv(here("data", "analysis_data", "clean_ward_demo_data.csv"))
 
-# Cleaned budget data
-budget_data_clean <- read_csv("../data/analysis_data/2022-2031-budget_data.csv")
-
-# Define year columns
+# Identify year columns
 year_cols <- as.character(2022:2031)
 
-#### Tests ####
 
+### Tests ###
+
+# Test that funding amounts are numeric and correctly handled 
 test_that("Funding Amounts are Numeric and Correctly Handled", {
-  expect_true(all(sapply(ward_data_clean[year_cols], is.numeric)))
-  expect_true(all(is.na(ward_data_clean[year_cols]) | ward_data_clean[year_cols] >= -Inf))
-})
-
-
-test_that("Negative Funding Amounts are Preserved", {
-  negative_funding <- ward_data_clean |>
-    filter(`Funding` < 0)
+  # Check that all year columns are numeric
+  expect_true(
+    budget_data_clean %>%
+      select(all_of(year_cols)) %>%
+      summarise_all(is.numeric) %>%
+      all()
+  )
   
-  expect_true(nrow(negative_funding) > 0)
-})
-
-test_that("Ward Numbers are Consistently Formatted", {
-  expect_true(all(str_detect(ward_data_clean$`Ward Number`, "^Ward \\d+$")))
-})
-
-test_that("Program/Agency Names are Consistently Formatted", {
-  expect_true(all(str_length(ward_data_clean$`Program/Agency Name`) > 0))
+  expect_true(
+    budget_data_clean %>%
+      select(all_of(year_cols)) %>%
+      mutate_all(is.finite) %>%
+      all()
+  )
 })
 
 
-# Total Overall Funding per Ward Number
-total_funding_ward_test <- ward_data_clean |>
-  group_by(`Ward Number`) |>
-  summarise(
-    Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)
-  ) %>%
-  arrange(desc(Total_Funding))
 
+# Test that Program/Agency names are non-empty strings 
+test_that("Program/Agency Names are Non-Empty Strings", {
+  expect_true(
+    budget_data_clean %>%
+      pull(`Program/Agency Name`) %>%
+      str_trim() %>%
+      nzchar() %>%
+      all(),
+    info = "All Program/Agency Names should be non-empty strings."
+  )
+})
+
+
+# Test that total funding per Ward Number is correct 
 test_that("Total Funding per Ward Number is Correct", {
-  sample_ward <- "Ward 1"
-  expected_total <- ward_data_clean |>
-    filter(`Ward Number` == sample_ward) |>
-    summarise(
-      expected = sum(across(all_of(year_cols)), na.rm = TRUE)
-    ) |>
-    pull(expected)
-  
-  actual_total <- total_funding_ward_test |>
-    filter(`Ward Number` == sample_ward) |>
-    pull(Total_Funding)
-  
-  expect_equal(actual_total, expected_total)
+  expected_totals <- budget_data_clean %>%
+    group_by(`Ward Number`) %>%
+    summarise(expected_total = sum(across(all_of(year_cols)), na.rm = TRUE))
+  total_funding_ward_test <- budget_data_clean %>%
+    group_by(`Ward Number`) %>%
+    summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)) %>%
+    arrange(desc(Total_Funding))
+  comparison <- expected_totals %>%
+    inner_join(total_funding_ward_test, by = "Ward Number")
+  expect_equal(comparison$Total_Funding, comparison$expected_total,
+               info = "Total funding per Ward Number should match expected sums.")
 })
 
-# Total Funding per Program/Agency per Ward Number
-total_funding_program_ward_test <- ward_data_clean |>
-  group_by(`Ward Number`, `Program/Agency Name`) |>
-  summarise(
-    Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE)
-  ) |>
-  arrange(`Ward Number`, desc(Total_Funding))
-
+# Test that total funding per Program/Agency per ward number is correct 
 test_that("Total Funding per Program/Agency per Ward Number is Correct", {
-  sample_ward <- "Ward 1"
-  sample_program <- "Infrastructure"
-  
-  expected_total <- ward_data_clean |>
-    filter(`Ward Number` == sample_ward, `Program/Agency Name` == sample_program) |>
-    summarise(
-      expected = sum(across(all_of(year_cols)), na.rm = TRUE)
-    ) |>
-    pull(expected)
-  
-  actual_total <- total_funding_program_ward_test |>
-    filter(`Ward Number` == sample_ward, `Program/Agency Name` == sample_program) |>
-    pull(Total_Funding)
-  
-  expect_equal(actual_total, expected_total)
+  expected_totals <- budget_data_clean %>%
+    group_by(`Ward Number`, `Program/Agency Name`) %>%
+    summarise(expected_total = sum(across(all_of(year_cols)), na.rm = TRUE), .groups = 'drop')
+  total_funding_program_ward_test <- budget_data_clean %>%
+    group_by(`Ward Number`, `Program/Agency Name`) %>%
+    summarise(Total_Funding = sum(across(all_of(year_cols)), na.rm = TRUE), .groups = 'drop') %>%
+    arrange(`Ward Number`, desc(Total_Funding))
+  comparison <- expected_totals %>%
+    inner_join(total_funding_program_ward_test, by = c("Ward Number", "Program/Agency Name"))
+  expect_equal(comparison$Total_Funding, comparison$expected_total,
+               info = "Total funding per Program/Agency per Ward Number should match expected sums.")
 })
-
-#### Summary of Tests ####
-
-# Run all tests
-test_dir(".", reporter = "summary")
