@@ -28,6 +28,7 @@ The remainder of the research is organized as follows: Section \ref{sec-data} de
 knitr::include_graphics("../other/images/toronto_wards.png")
 ```
 
+\newpage
 
 # Data {#sec-data}
 
@@ -157,17 +158,19 @@ This research focused on ward-specific funding by excluding "City Wide" allocati
 
 The key variables of interest for this research are:
 
--   Per Capita Funding: Total capital funding allocated to a ward divided by its population.
+-   `Per Capita Funding`: Total capital funding allocated to a ward divided by its population.
 
--   Median Household Income: The median income of households within a ward.
+-   `Median Household Income`: The median income of households within a ward.
 
--   Low-Income Prevalence: The percentage of households classified as low-income in a ward.
+-   `Low-Income Prevalence`: The percentage of households classified as low-income in a ward.
 
--   Educational Attainment: The percentage of residents with a bachelor's degree or higher.
+-   `Educational Attainment`: The percentage of residents with a bachelor's degree or higher.
 
--   Visible Minority Population: The percentage of residents who identify as visible minorities.
+-   `Visible Minority Population`: The percentage of residents who identify as visible minorities.
 
 Although multiple ten-year budget datasets are available, including the 2023-2032 and 2024-2033 Capital Budget & Plan, this study opted to utilize the 2022-2031 Capital Budget & Plan. This is because, the 2022-2031 budget period aligns more closely with the 2021 Ward Profiles, ensuring that the socioeconomic variables and funding allocations are analyzed within a similar timeframe.
+
+\newpage
 
 ```{r summary-stats-table, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: tbl-demographics-stats
@@ -239,11 +242,11 @@ kable(
 
 @tbl-demographics-stats shows the ward specific funding and key demographic indicators. Ward 13 stands out with the highest per capita funding and a high percentage of low income prevalence, relative to other wards.
 
-\newpage
 
 ```{r Figure 1, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-percapitafunding
 #| fig-cap: Bar graph showing Per Capita Capital Funding by Ward
+#| fig-pos: H
 
 # Wards by Per Capita Funding
 ggplot(merged_data, aes(x = reorder(`Ward`, per_capita_funding), y = per_capita_funding)) +
@@ -256,10 +259,10 @@ ggplot(merged_data, aes(x = reorder(`Ward`, per_capita_funding), y = per_capita_
   scale_y_continuous(labels = dollar_format()) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 14, hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-    axis.title = element_text(size = 14),
-    axis.text.y = element_text(size = 10)
+    plot.title = element_text(size = 12, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    axis.title = element_text(size = 10),
+    axis.text.y = element_text(size = 8)
   ) +
   coord_flip()
 ```
@@ -270,13 +273,15 @@ ggplot(merged_data, aes(x = reorder(`Ward`, per_capita_funding), y = per_capita_
 
 ## Per Capita Funding and Household Median Income
 
-The average income across wards is \$84,000, meaning half of the wards have median incomes at or below this amount. Higher income wards will be categorized as one with a median household income above \$84,000. A positive relationship was observed between per capita funding and median household income as wards above the citywide average \$84,000 generally received more funding per capita. Specifically, among the top five wards in per capita funding, four have median incomes above \$84,000. However, among the bottom five wards, four have median incomes below \$84,000.
+The average income across wards is \$84,000, meaning half of the wards have median incomes at or below this amount. Higher income wards will be categorized as one with a median household income above \$84,000. 
 
-More specifically, Ward 2, with a high median income of \$100,000, received the second-highest per capita funding at \$4,166.43. In contrast, Ward 22, which has a lower median income of \$77,000, received the second-lowest per capita funding at just \$192.44. This pattern suggests that wealthier wards benefit more from capital investments.
+A positive relationship was observed between per capita funding and median household income as wards above the citywide average \$84,000 generally received more funding per capita. Specifically, among the top five wards in per capita funding, four have median incomes above \$84,000. However, among the bottom five wards, four have median incomes below \$84,000. Ward 2, with a high median income of \$100,000, received the second-highest per capita funding at \$4,166.43. In contrast, Ward 22, which has a lower median income of \$77,000, received the second-lowest per capita funding at just \$192.44. This pattern suggests that wealthier wards benefit more from capital investments.
+
 
 ```{r Figure 2, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-householdincome
 #| fig-cap: Scatter plot illustrating the relationship between Per Capita Funding and Median Household Income
+#| fig-pos: H
 
 # Scatter plot of Per Capita Funding vs Median Household Income with ward 13 removed 
 
@@ -302,9 +307,11 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
 
 It was found that an inverse relationship exists between per capita funding and the prevalence of low income households. We will classify a ward as having a high percentage of low-income households if the prevalence is 13% or higher, which represents the average low-income prevalence. Among the top five funded wards, only two can be classified as higher low-income prevalence. In contrast, of the bottom five funded wards, four can be classified as having higher low-income prevalence. This suggests that wards with more low-income households receive less capital budget funding.
 
+
 ```{r Figure 3, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-lowincome
 #| fig-cap: Per capita funding and low income prevalence for top and bottom 5 wards excluding ward 13 
+#| fig-pos: H
 
 top5_wards <- merged_data |>
   arrange(desc(per_capita_funding)) |>
@@ -369,11 +376,12 @@ ggplot(selected_wards, aes(x = reorder(`Ward`, per_capita_funding))) +
 
 ## Per Capita Funding and Educational Attainment
 
-We will also classify wards where at least 33% of residents hold a bachelor's degree or higher as having high educational attainment. There is a clear positive relationship between educational attainment and per capita funding as wards with higher education levels tend to receive more funding. More specifically, Ward 10, with 60.97% of residents holding a bachelor’s degree, received \$4,127.10 per capita, while Ward 11, with 56.07%, received \$1,637.81 per capita. In contrast, Ward 7, where only 14.67% of residents hold a degree, received just \$852.05 per capita.
+We will classify wards where at least 33% of residents hold a bachelor's degree or higher, as having high educational attainment. There is a clear positive relationship between educational attainment and per capita funding as wards with higher education levels tend to receive more funding. More specifically, Ward 10, with 60.97% of residents holding a bachelor’s degree, received \$4,127.10 per capita, while Ward 11, with 56.07%, received \$1,637.81 per capita. In contrast, Ward 7, where only 14.67% of residents hold a degree, received just \$852.05 per capita.
 
 ```{r Figure 4, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-education
 #| fig-cap: Scatter plot illustrating the relationship between Per Capita Funding and Education Levels
+#| fig-pos: H
 
 # Scatter plot of Per Capita Funding vs Bachelor's Degree of Higher with ward 13 removed 
 
@@ -404,6 +412,7 @@ Examples highlighting this trend include Ward 22, where 82.31% of the population
 ```{r Figure 5, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-minority
 #| fig-cap: Scatter plot illustrating the relationship between Per Capita Funding and Minority Population
+#| fig-pos: H
 
 # Scatter plot of Per Capita Funding vs Minority Population with ward 13 removed 
 
