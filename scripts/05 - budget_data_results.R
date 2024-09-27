@@ -166,6 +166,3 @@ ggplot(funding_yearly_ward, aes(x = as.integer(Year), y = Funding, color = `Ward
     legend.title = element_text(size = 13),
     legend.text = element_text(size = 11)
   )
-
-
-
