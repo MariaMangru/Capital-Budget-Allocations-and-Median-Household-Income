@@ -422,11 +422,11 @@ These findings highlight the broader effects of unequal resource distribution on
 
 ### Weaknesses
 
-While this study provides interesting results, there are a few limitations. Firstly, the analysis is limited by the focus on median household income, educational attainment, and visible minority populations, potentially missing other important socioeconomic factors like housing costs, employment rates, and age demographics. Next, the reliance on 2021 census data and projected capital budgets through 2031 may not account for recent changes. Lastly, the methodology also focuses on correlations without examining the underlying causes of funding disparities, such as political priorities or historical patterns.
+While this study provides interesting results, there are a some limitations. Firstly, the analysis is limited by the focus on median household income, educational attainment, and visible minority populations, potentially missing other important socioeconomic factors like housing costs, employment rates, and age demographics. Additionally, the reliance on 2021 census data and projected capital budgets through 2031 may not account for recent changes. Lastly, the methodology highlights associations without examining the underlying causes of funding disparities, such as political priorities or historical patterns.
 
 ### Next Steps
 
-To address these limitations, future research should expand the range of socioeconomic variables, such as housing costs and employment rates, to provide a more comprehensive understanding of funding distribution. Longitudinal studies tracking changes in funding and socioeconomic outcomes would help assess the long-term effects of capital investments. Additionally, conducting a comparative study with other cities could reveal best practices for equitable funding.
+To address these limitations, future research should incorporate a broader range of socioeconomic variables, such as housing costs and employment rates, to gain a more comprehensive understanding of funding distribution. Comparative analyses with other cities could also help identify best practices for equitable funding and inform more effective policy decisions
 
 \newpage
 
