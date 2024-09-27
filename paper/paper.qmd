@@ -209,7 +209,7 @@ Rows in **red** indicate a **Household Median Income** of \$84,000 or less.
 
 ```{r Figure 1, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-percapitafunding
-#| fig-cap: Box plot showing Per Capita Capital Funding by Ward
+#| fig-cap: Bar graph showing Per Capita Capital Funding by Ward
 
 # Wards by Per Capita Funding
 ggplot(merged_data, aes(x = reorder(`Ward Number`, per_capita_funding), y = per_capita_funding)) +
@@ -268,33 +268,73 @@ ggplot(filtered_data, aes(x = as.numeric(`Median total income of households in 2
 
 ## Per Capita Funding and Low-Income Prevalence
 
-Analyzing the prevalence of low-income households provides additional insight into funding disparities. Wards with higher percentages of low-income households often receive less per capita funding. A ward is defined as having a higher percentage of low income households if the low income prevalence is 13% or higher. Therefore, of the top 5 wards for per capita funding, two are classified as low income. Conversely, of the bottom 5 wards for per capita funding, four are classified as low income.
+It was found that an inverse relationship exists between per capita funding and the prevalence of low income households. We will classify a ward as having a high percentage of low-income households if the prevalence is 13% or higher, which represents the average low-income prevalence. Among the top five funded wards, only two can be classified as higher low-income prevalence. In contrast, of the bottom five funded wards, four can be classified as having higher low-income prevalence. This suggests that wards with more low-income households receive less capital budget funding.
 
-**Figure 2** demonstrates a downward trend, suggesting that as the prevalence of low-income households increases, per capita funding tends to decrease. This inverse relationship raises concerns about the equitable distribution of city resources.
 
 ```{r Figure 3, echo=FALSE, message=FALSE, warning=FALSE}
 #| label: fig-lowincome
+#| fig-cap: Per capita funding and low income prevalence for top and bottom 5 wards excluding ward 13 
 
-# Scatter plot of Per Capita Funding vs Prevalence of low income with ward 13 removed 
+top5_wards <- merged_data |>
+  arrange(desc(per_capita_funding)) |>
+  slice(2:6)
 
-filtered_data <- merged_data |>
-  filter(`Ward Number` != 13)
+bottom5_wards <- merged_data |>
+  arrange(per_capita_funding)|>
+  slice(1:5)
 
-ggplot(filtered_data, aes(x = as.numeric(`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`), y = per_capita_funding)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(
-    title = "Per Capita Funding vs Prevalence of low income",
-    x = "Prevalence of low income (%)",
-    y = "Per Capita Funding ($)"
+# Combine these wards 
+selected_wards <- bind_rows(top5_wards, bottom5_wards) |>
+  mutate(Category = ifelse(`Ward Number` %in% top5_wards$`Ward Number`, "Top 5", "Bottom 5"))
+
+selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` <- as.numeric(as.character(selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`))
+
+
+# Calculate scaling factor
+max_funding <- max(selected_wards$per_capita_funding, na.rm = TRUE)
+max_low_income <- max(selected_wards$`Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)`, na.rm = TRUE)
+scale_factor <- max_funding / max_low_income
+
+# Add a scaled Low Income Prevalence for plotting
+selected_wards <- selected_wards |>
+  mutate(Scaled_Low_Income_Prevalence = `Prevalence of low income based on the Low-income measure, after tax (LIM-AT) (%)` * scale_factor)
+
+
+# Create the Combined Bar and Line Chart
+ggplot(selected_wards, aes(x = reorder(`Ward Number`, per_capita_funding))) +
+  geom_bar(aes(y = per_capita_funding, fill = Category), stat = "identity") +
+  geom_line(aes(y = Scaled_Low_Income_Prevalence, group = 1, color = "Low Income Prevalence"), size = 1.2) +
+  geom_point(aes(y = Scaled_Low_Income_Prevalence, color = "Low Income Prevalence"), size = 3) +
+ 
+   scale_y_continuous(
+    name = "Per Capita Funding ($CAD)",
+    labels = dollar_format(),
+    sec.axis = sec_axis(~./scale_factor, name = "Low Income Prevalence")
   ) +
-  scale_x_continuous(labels = percent_format()) +
-  scale_y_continuous(labels = dollar_format()) +
-  theme_minimal()
+  labs(
+    title = "Top 5 and Bottom 5 Wards by Per Capita Funding with Low Income Prevalence",
+    x = "Ward Number",
+    fill = "Category",
+    color = ""
+  ) +
+  
+
+  scale_fill_manual(values = c("Top 5" = "#0072B2", "Bottom 5" = "red")) +
+  scale_color_manual(values = c("Low Income Prevalence" = "black")) +
+  
+  theme_minimal(base_family = "Helvetica") +
+  theme(
+    plot.title = element_text(size = 10, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+    axis.title.y.left = element_text(color = "black", size = 10),
+    axis.title.y.right = element_text(color = "black", size = 10),
+    legend.position = "top",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 8)
+  )
 ```
 
-
-
+@fig-lowincome compares the top and bottom 5 wards by per capita funding, with the prevalence of low-income households overlaid. The red bars represent the wards with the lowest per capita funding, while the blue bars represent those with the highest. Ward 13 was excluded from this graph due to its skewed impact on the data. The black line shows the prevalence of low-income households, which is generally higher in wards with lower per capita funding. However, even among the top-funded wards, the relationship between per capita funding and low-income prevalence is not perfectly linear, suggesting that while funding tends to be higher in wealthier wards, some lower-income wards still receive significant funding.
 
 
 ## Per Capita Funding and Educational Attainment
@@ -362,6 +402,8 @@ ggplot(filtered_data, aes(x = as.numeric(`Total visible minority population per 
 ```
 
 There are outliers such as Ward 23, where 92.18% of residents are visible minorities, yet the ward receives \$1,829.15 per capita. However, the general trend suggests that wards with larger visible minority populations tend to receive less funding overall, raising concerns about whether capital funding is being equitably distributed in alignment with the needs of these communities.
+
+
 
 # Discussion {#sec-discussion}
 
